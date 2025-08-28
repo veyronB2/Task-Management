@@ -40,7 +40,7 @@ Follow these instructions to get the project up and running on your local machin
     ```bash
     npm run dev
     ```
-    Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+    This will open a default browser on http://localhost:3000
 
 -   **Build for production:**
     Bundles the app for production to the `dist` folder.
@@ -58,6 +58,12 @@ Follow these instructions to get the project up and running on your local machin
     Launches the test runner in interactive watch mode.
     ```bash
     npm run test
+    ```
+
+    **Run end to end tests:**
+    Launches the test runner in interactive watch mode.
+    ```bash
+    npm run test:e2e
     ```
 
 ## Architectural Decisions
@@ -79,7 +85,7 @@ Follow these instructions to get the project up and running on your local machin
 
 ### State Management
 
--   TODO
+-   **Redux Toolkit**: 
 
 ### Additional Libraries
 
@@ -90,11 +96,10 @@ Follow these instructions to get the project up and running on your local machin
 
 -   **MUI vs. Custom Styling**: Using a large component library like MUI significantly speeds up development but can add to the final bundle size. The trade-off was made in favor of development velocity and a consistent, professional UI. A more bespoke application might opt for a utility-first CSS framework like Tailwind CSS or custom-styled components for more design control and a smaller footprint.
 -   **Loose ESLint Rules**: Certain strict ESLint rules, such as `@typescript-eslint/no-explicit-any`, have been temporarily disabled. This was a pragmatic choice to speed up initial development and prototyping. The intention is to enable and enforce stricter rules as the codebase matures to improve long-term maintainability.
--   **No Global State Manager**: By not including a global state management library from the start, the initial setup is simpler and has less boilerplate. The trade-off is that if the application scales and state needs to be shared across many disconnected components, there will be a need to refactor and introduce a library like Redux or Zustand later on.
 
 ## AI Tools Used
 
--   **Gemini Code Assist** was used for:
+-   **Gemini and Coopilot Code Assist** was used for:
     -   Code review and analysis.
-    -   Identifying areas for improvement in code quality and architecture.
+    -   Identifying areas for improvement in code quality and architecture. 
     -   Generating and structuring this README file.

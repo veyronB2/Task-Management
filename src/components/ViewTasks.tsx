@@ -24,6 +24,7 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { AgGridReact } from 'ag-grid-react';
 import ConfirmDialog from './ConfirmationDialog';
+import FormActionButtons from './FormActionButtons';
 import HeroBanner from './HeroBanner';
 import { Task } from '../mock-api';
 import { enqueueSnackbar } from 'notistack';
@@ -117,17 +118,7 @@ const TaskTable = () => {
   return (
     <Box display="flex" flexDirection="column" width="100%" paddingLeft="3rem" paddingRight="3rem">
       <HeroBanner title="View All Tasks" />
-      <Box display="flex" justifyContent="flex-start" gap={2} mt={2} flexDirection={{ xs: 'column', sm: 'row' }}>
-        <Button variant="contained" color="primary" onClick={() => window.history.back()}>
-          Go Back
-        </Button>
-        <Button variant="contained" color="secondary" onClick={handleOpenFormModal}>
-          Add Task
-        </Button>
-        <Button variant="outlined" color="secondary" onClick={loadTasks}>
-          Refresh
-        </Button>
-      </Box>
+      <FormActionButtons handleOpenFormModal={handleOpenFormModal} onRefreshClick={loadTasks} />
       <Paper sx={{ mt: 4, padding: '4rem' }}>
         <div className="ag-theme-alpine" style={{ height: 500, width: '100%' }}>
           <AgGridReact
