@@ -23,16 +23,16 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     render() {
         if (!!this.state.error) {
             return <Box
-                        width="100%"
-                        height="100vh"
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        justifyContent="center"
-                        px={2} 
-                    > 
-                        <HeroBanner title="Something went wrong..."/>
-                    </Box>
+                width="100%"
+                height="100vh"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                px={2}
+            >
+                <HeroBanner title="Something went wrong..." />
+            </Box>;
         }
 
         return this.props.children;

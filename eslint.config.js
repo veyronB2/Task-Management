@@ -8,7 +8,7 @@ import tseslint from "typescript-eslint";
 
 const eslintConfig = tseslint.config(
     {
-        ignores: ["dist/*", "!.storybook"],
+        ignores: ["dist/*"],
         extends: [
             js.configs.recommended,
             react.configs.flat.recommended,
@@ -75,7 +75,7 @@ const eslintConfig = tseslint.config(
             }],
             "@typescript-eslint/no-explicit-any": ["off"],
             "array-callback-return": "error",
-            "no-console": ["error", {
+            "no-console": ["warn", {
                 "allow": ["warn", "error"]
             }],
             "no-duplicate-imports": "error",

@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button } from "@mui/material";
 
 interface FormActionButtonsProps {
     handleOpenFormModal: () => void;
@@ -6,19 +6,19 @@ interface FormActionButtonsProps {
 }
 
 const FormActionButtons = ({ handleOpenFormModal, onRefreshClick}: FormActionButtonsProps) => {
-  return (
-    <Box display="flex" justifyContent="flex-start" gap={2} mt={2} flexDirection={{ xs: 'column', sm: 'row' }}>
-        <Button variant="contained" color="primary" onClick={() => window.history.back()}>
-            Go Back
-        </Button>
-        <Button variant="contained" color="secondary" onClick={handleOpenFormModal}>
-            Add Task
-        </Button>
-        <Button variant="outlined" color="secondary" onClick={onRefreshClick}>
-            Refresh
-        </Button>
-    </Box>
-  )
-}
+    return (
+        <Box display="flex" justifyContent="flex-start" gap={2} mt={2} flexDirection={{ xs: "column", sm: "row" }}>
+            <Button variant="contained" color="primary" onClick={() => window.history.back()}>
+                Go Back
+            </Button>
+            <Button variant="contained" color="secondary" onClick={handleOpenFormModal}>
+                Add Task
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={onRefreshClick}>
+                Refresh
+            </Button>
+        </Box>
+    );
+};
 
-export default FormActionButtons
+export default FormActionButtons;
