@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   TextField,
   Typography,
@@ -10,27 +11,26 @@ import {
 import { CreateTaskData, createTask } from '../../mock-api';
 import React, { useCallback, useState } from 'react';
 
+import { enqueueSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 
 interface FormField {
   value: string;
   required: boolean;
   error: boolean;
-  id: string;
-  isCompleted: boolean;
 }
 
 interface FormData {
   title: FormField;
-  dueDate: FormField
+  dueDate: FormField;
   description: FormField;
 }
 
 const initialFormData: FormData = {
-  title: { id: "", value: '', required: true, error: false, isCompleted: false },
-  dueDate: { id: "", value: '', required: true, error: false,  isCompleted: false },
-  description: { id: "", value: '', required: false, error: false,  isCompleted: false },
-}
+  title: { value: '', required: true, error: false },
+  dueDate: { value: '', required: true, error: false },
+  description: { value: '', required: false, error: false },
+};
 
 const fieldBackground = { backgroundColor: 'white' };
 
@@ -39,11 +39,14 @@ const TaskForm: React.FC = () => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [formData, setFormData] = useState<FormData>(initialFormData)
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    enqueueSnackbar('The Task has been submitted', { variant: 'info' });
     const updatedFormData = Object.keys(formData).reduce((acc, key) => {
       const fieldKey = key as keyof FormData;
       const field = formData[fieldKey];
@@ -58,20 +61,22 @@ const TaskForm: React.FC = () => {
 
     if (isFormValid) {
       const newTask: CreateTaskData = {
-            title: formData.title.value,
-            description: formData.description.value,
-            dueDate: new Date(formData.dueDate.value),
+        title: updatedFormData.title.value,
+        description: updatedFormData.description.value,
+        dueDate: new Date(updatedFormData.dueDate.value),
       };
-          try {
-            const created = await createTask(newTask);
-            console.log('Task created:', created);
-          } catch (error) {
-            console.error('Error creating task:', error);
-          }
+      setIsLoading(true);
+      try {
+        await createTask(newTask);
+        enqueueSnackbar('The task has been sucessfully created!', { variant: 'success' });
+        setFormData(initialFormData);
+      } catch (error) {
+        enqueueSnackbar('Task could not be created', { variant: 'error' });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
-
-
 
 const handleChange = useCallback(
   (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -91,6 +96,11 @@ const handleChange = useCallback(
     navigate(-1);
   }, [])
 
+  const handleViewTasksClick = useCallback(() => {
+    navigate('/view-tasks')
+  }, [])
+
+
   return (
     <Container 
       maxWidth="sm"
@@ -101,9 +111,12 @@ const handleChange = useCallback(
           padding: "2rem",
       }}
     >
-      <Box mb={2}>
-        <Button variant="contained" onClick={handleBackBtnClick}>
+      <Box display="flex" justifyContent="space-between" width='100%' mb={2}>
+        <Button variant="contained" onClick={handleBackBtnClick} disabled={isLoading}>
           ← Back
+        </Button>
+        <Button variant="contained" onClick={handleViewTasksClick} disabled={isLoading}>
+          View Tasks
         </Button>
       </Box>
       <Box >
@@ -126,6 +139,7 @@ const handleChange = useCallback(
             fullWidth
             error={formData.title.error}
             value={formData?.title.value}
+            disabled={isLoading}
             onChange={handleChange}
           />
           <TextField
@@ -136,6 +150,7 @@ const handleChange = useCallback(
             fullWidth
             value={formData?.dueDate.value}
             required
+            disabled={isLoading}
             onChange={handleChange}
             error={formData.dueDate.error}
             slotProps={{
@@ -153,10 +168,11 @@ const handleChange = useCallback(
             fullWidth
             value={formData?.description?.value}
             error={formData.description.error}
+            disabled={isLoading}
             onChange={handleChange}
           />
-          <Button variant="contained" color="primary" type="submit">
-            Create Task
+          <Button variant="contained" color="primary" type="submit" disabled={isLoading}>
+            {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Create Task'}
           </Button>
         </Box>
       </Box>
