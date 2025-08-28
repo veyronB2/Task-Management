@@ -23,7 +23,7 @@
     	"allowJs": true,
 
 		/* Vitest */
-		"types": ["vitest/globals", "node"],
+		"types": ["vitest/globals", "node", "@testing-library/jest-dom"],
 
     "paths": {
       "@/*": ["./src/*"]
