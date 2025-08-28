@@ -4,24 +4,17 @@ import AppRoutes from './components/AppRoutes';
 import { BrowserRouter } from 'react-router-dom';
 import ErrorBoundary from './components/Pages/ErrorBoundry';
 import Layout from './components/Layout';
-import React from 'react';
 import { SnackbarProvider } from 'notistack';
+import { useMemo } from 'react';
 
-const App: React.FC = () => {
-  const theme = createTheme();
+const App = () => {
 
   return (
-    <ThemeProvider theme={theme}>
-      <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
-        <BrowserRouter>
-          <ErrorBoundary>
-            <Layout>
-              <AppRoutes />
-            </Layout>
-          </ErrorBoundary>
-        </BrowserRouter>
-      </SnackbarProvider>
-    </ThemeProvider>
+      <ErrorBoundary>
+        <Layout>
+          <AppRoutes />
+        </Layout>
+      </ErrorBoundary>
   );
 };
 

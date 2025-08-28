@@ -33,7 +33,7 @@ const eslintConfig = tseslint.config(
             ...reactHooks.configs.recommended.rules,
             "@stylistic/comma-dangle": ["error", "only-multiline"],
             "@stylistic/comma-spacing": ["error", { "before": false, "after": true }],
-            "@stylistic/eol-last": ["error", "never"],
+            "@stylistic/eol-last": ["error", "always"],
             "@stylistic/function-call-spacing": ["error", "never"],
             "@stylistic/indent": [
                 "error",
