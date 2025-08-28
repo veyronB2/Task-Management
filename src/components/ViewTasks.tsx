@@ -17,15 +17,15 @@ import {
   openConfirmDialog,
   openModal,
   removeTask,
-} from '../../redux/tasksReducer';
-import { columnDefs, gridOptions } from '../../utilities/agGrid';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+} from '../redux/tasksReducer';
+import { columnDefs, gridOptions } from '../utilities/agGrid';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { useCallback, useEffect, useRef } from 'react';
 
 import { AgGridReact } from 'ag-grid-react';
-import ConfirmDialog from '../ConfirmationDialog';
-import HeroBanner from '../HeroBanner';
-import { Task } from '../../mock-api';
+import ConfirmDialog from './ConfirmationDialog';
+import HeroBanner from './HeroBanner';
+import { Task } from '../mock-api';
 import { enqueueSnackbar } from 'notistack';
 import { isEmpty } from 'lodash';
 

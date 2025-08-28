@@ -1,7 +1,7 @@
 import { ColDef, GridOptions, ICellRendererParams } from "ag-grid-community";
 
 import { AgGridActionIcon } from "../components/AgGridIcon";
-import { RowData } from "../components/Pages/ViewTasks";
+import { RowData } from "../components/ViewTasks";
 import { Task } from "../mock-api";
 import { getNoOverlayNoRowsTemplate } from "./utitlities";
 
