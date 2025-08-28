@@ -23,7 +23,7 @@
     	"allowJs": true,
 
 		/* Vitest */
-		"types": ["vitest/globals"],
+		"types": ["vitest/globals", "node"],
 
     "paths": {
       "@/*": ["./src/*"]

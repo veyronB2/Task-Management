@@ -31,6 +31,7 @@ export const columnDefs: ColDef<RowData>[] = [
     filter: false,
     sortable: false,
     suppressMovable: true,
+    resizable: false,
     cellRenderer: GetActionIcons,
   },
 ];
