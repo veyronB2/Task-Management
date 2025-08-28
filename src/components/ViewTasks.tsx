@@ -63,7 +63,7 @@ const TaskTable = () => {
   const handleCellClick = useCallback(
     (event: CellClickedEvent<Task>) => {
       const rowData = event.data;
-
+      
       if (event.colDef.colId === 'actions') return;
 
       if (!isEmpty(rowData)) {
@@ -72,6 +72,7 @@ const TaskTable = () => {
           dueDate: {
             value: rowData.dueDate ? format(new Date(rowData.dueDate), "yyyy-MM-dd'T'HH:mm") : '',
             ...staticFieldValues,
+            required: true
           },
           description: { value: rowData.description || '', ...staticFieldValues },
           completed: { value: rowData.isCompleted ? 'true' : 'false', ...staticFieldValues },
@@ -87,9 +88,9 @@ const TaskTable = () => {
     dispatch(closeModal());
   }, [dispatch]);
 
-  const onDeleteItemIconClick = (taskId: string) => {
+  const onDeleteItemIconClick = useCallback((taskId: string) => {
     dispatch(openConfirmDialog(taskId));
-  };
+  }, [dispatch]);
 
   const handleConfirmDelete = async () => {
     if (!taskToDelete) return;
@@ -143,7 +144,7 @@ const TaskTable = () => {
       <TaskFormModal
         open={modalOpen}
         onClose={handleCloseModal}
-        initialData={selectedTaskData}
+        taskData={selectedTaskData}
         onTaskComplete={loadTasks}
       />
       <ConfirmDialog

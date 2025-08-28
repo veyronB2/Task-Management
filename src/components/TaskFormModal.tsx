@@ -39,7 +39,7 @@ const initialFormData: TaskFormData = {
   title: { value: '', required: true, error: false },
   dueDate: { value: '', required: true, error: false },
   description: { value: '', required: false, error: false },
-  completed: { value: '', required: false, error: false },
+  completed: { value: '', required: true, error: false },
   id: { value: '', required: false, error: false },
 };
 
@@ -48,23 +48,23 @@ const fieldBackground = { backgroundColor: 'white' };
 interface TaskFormModalProps {
   open: boolean;
   onClose: () => void;
-  initialData?: TaskFormData | null;
+  taskData?: TaskFormData | null;
   onTaskComplete: () => void; 
 }
 
-const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onClose, initialData, onTaskComplete }) => {
+const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onClose, taskData, onTaskComplete }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [formData, setFormData] = useState<TaskFormData>(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (initialData) {
-      setFormData(initialData);
+    if (taskData) {
+      setFormData(taskData);
     } else {
       setFormData(initialFormData);
     }
-  }, [initialData, open]);
+  }, [taskData, open]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent) => {
