@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { SnackbarProvider } from 'notistack';
-import { store } from '../redux/store';
+import { store } from './redux/store';
 
 interface Props {
   children: ReactNode;

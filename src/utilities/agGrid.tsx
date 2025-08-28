@@ -1,9 +1,9 @@
 import { ColDef, GridOptions, ICellRendererParams } from "ag-grid-community";
+import { formatDisplayDate, getNoOverlayNoRowsTemplate } from "./utitlities";
 
 import { AgGridActionIcon } from "../components/AgGridIcon";
 import { RowData } from "../components/ViewTasks";
 import { Task } from "../mock-api";
-import { getNoOverlayNoRowsTemplate } from "./utitlities";
 
 export const GetActionIcons = (params: ICellRendererParams<Task> ) => {
     const taskId = (params.data as Task).id?.toString();
@@ -20,7 +20,7 @@ export const GetActionIcons = (params: ICellRendererParams<Task> ) => {
 export const columnDefs: ColDef<RowData>[] = [
   { field: 'id', headerName: 'Task ID', filter: 'agTextColumnFilter' },
   { field: 'title', filter: 'agTextColumnFilter' },
-  { field: 'dueDate', headerName: 'Due Date', filter: 'agTextColumnFilter' },
+  { field: 'dueDate', headerName: 'Due Date', filter: 'agTextColumnFilter', valueFormatter: (params) => formatDisplayDate(params.value), },
   { field: 'description', filter: 'agTextColumnFilter' },
   { field: 'isCompleted', headerName: 'Completed', filter: 'agTextColumnFilter' },
   {

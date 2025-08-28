@@ -27,6 +27,7 @@ import ConfirmDialog from './ConfirmationDialog';
 import HeroBanner from './HeroBanner';
 import { Task } from '../mock-api';
 import { enqueueSnackbar } from 'notistack';
+import { format } from 'date-fns';
 import { isEmpty } from 'lodash';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -69,9 +70,7 @@ const TaskTable = () => {
         const formData: TaskFormData = {
           title: { value: rowData.title, ...staticFieldValues },
           dueDate: {
-            value: rowData.dueDate
-              ? new Date(rowData.dueDate).toISOString().split('T')[0]
-              : '',
+            value: rowData.dueDate ? format(new Date(rowData.dueDate), "yyyy-MM-dd'T'HH:mm") : '',
             ...staticFieldValues,
           },
           description: { value: rowData.description || '', ...staticFieldValues },
@@ -106,9 +105,13 @@ const TaskTable = () => {
     }
   };
 
-  const handleCancelDelete = () => {
+  const handleCancelDelete = useCallback(() => {
     dispatch(closeConfirmDialog());
-  };
+  }, [dispatch]);
+
+  const handleOpenFormModal = useCallback(() => {
+      dispatch(openModal(null))
+  }, [dispatch])
 
   return (
     <Box display="flex" flexDirection="column" width="100%" paddingLeft="3rem" paddingRight="3rem">
@@ -117,7 +120,7 @@ const TaskTable = () => {
         <Button variant="contained" color="primary" onClick={() => window.history.back()}>
           Go Back
         </Button>
-        <Button variant="contained" color="secondary" onClick={() => dispatch(openModal(null))}>
+        <Button variant="contained" color="secondary" onClick={handleOpenFormModal}>
           Add Task
         </Button>
         <Button variant="outlined" color="secondary" onClick={loadTasks}>

@@ -1,9 +1,9 @@
 import { Box, Button, Stack } from '@mui/material';
 import React, { useCallback } from 'react';
 
-import HeroBanner from '../HeroBanner';
+import HeroBanner from './HeroBanner';
 import { useNavigate } from 'react-router-dom';
-import { viewTasksPath } from '../../utilities/constants';
+import { viewTasksPath } from '../utilities/constants';
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
@@ -27,9 +27,6 @@ const HomePage: React.FC = () => {
             <Button variant="contained" color="primary" onClick={handleViewTasksClick}>
                 View Tasks
             </Button>
-            {/* <Button variant="outlined" color="primary" onClick={handleAddTaskClick}>
-                Add Task
-            </Button> */}
         </Stack>
     </Box>
   );

@@ -15,11 +15,11 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { CreateTaskData, UpdateTaskData, createTask, updateTask } from '../../mock-api';
+import { CreateTaskData, UpdateTaskData, createTask, updateTask } from '../mock-api';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { enqueueSnackbar } from 'notistack';
-import { validateForm } from '../../utilities/utitlities';
+import { validateForm } from '../utilities/utitlities';
 
 export interface FormField {
   value: string;
@@ -94,10 +94,8 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onClose, initialDat
     const updatedFormData = validateForm(formData, isExistingTask);
     setFormData(updatedFormData);
 
-    const isFormValid = !Object.values(updatedFormData).some((field) => field?.error);
+    const isFormValid = !Object.values(updatedFormData).some((field) => field && typeof field === 'object' && 'error' in field && field.error);
 
-    console.log("isFormValid", isFormValid);
-    
     if (!isFormValid) return;
 
     enqueueSnackbar('Submitting task...', { variant: 'info' });
@@ -161,14 +159,14 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onClose, initialDat
             sx={fieldBackground}
             label="Due Date"
             name="dueDate"
-            type="date"
+            type="datetime-local"
             fullWidth
             required
             value={formData.dueDate.value}
             disabled={isLoading}
             onChange={handleChange}
             error={formData.dueDate.error}
-            InputLabelProps={{ shrink: true }}
+            slotProps={{ htmlInput: { step: 1 }, inputLabel: { shrink: true } }}
           />
           <FormControl fullWidth required disabled={isLoading} error={formData.completed.error}>
             <InputLabel id="completed-label">Completed</InputLabel>

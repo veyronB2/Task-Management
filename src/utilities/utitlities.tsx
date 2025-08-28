@@ -1,4 +1,5 @@
-import { TaskFormData } from "../components/Pages/TaskFormModal";
+import { TaskFormData } from '../components/TaskFormModal';
+import { format } from 'date-fns';
 
 interface GetNoOverlayNoRowsTemplateProps {
     entity?: string;
@@ -37,6 +38,15 @@ export const validateForm = (data: TaskFormData, isExistingTask: boolean): TaskF
 
   return validatedData as TaskFormData;
 };
+
+export const formatDisplayDate = (dateString: string): string => {
+  try {
+    return format(new Date(dateString), 'dd MMMM yyyy, HH:mm:ss');
+  } catch (error) {
+    return dateString;
+  }
+};
+
 
 
 
