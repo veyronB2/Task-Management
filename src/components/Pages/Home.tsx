@@ -3,18 +3,15 @@ import React, { useCallback } from 'react';
 
 import HeroBanner from '../HeroBanner';
 import { useNavigate } from 'react-router-dom';
+import { viewTasksPath } from '../../utilities/constants';
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
 
     const handleViewTasksClick = useCallback(() => {
-        navigate("/view-tasks")
+        navigate(viewTasksPath)
     }, [])
-
-    const handleAddTaskClick = useCallback(() => {
-        navigate("/add-task")
-    }, [])
-
+    
   return (
     <Box
         width="100%"
@@ -30,9 +27,9 @@ const HomePage: React.FC = () => {
             <Button variant="contained" color="primary" onClick={handleViewTasksClick}>
                 View Tasks
             </Button>
-            <Button variant="outlined" color="primary" onClick={handleAddTaskClick}>
+            {/* <Button variant="outlined" color="primary" onClick={handleAddTaskClick}>
                 Add Task
-            </Button>
+            </Button> */}
         </Stack>
     </Box>
   );
