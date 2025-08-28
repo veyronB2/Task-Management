@@ -18,19 +18,25 @@ export const validateForm = (data: TaskFormData, isExistingTask: boolean): TaskF
     const fieldKey = key as keyof TaskFormData;
     const field = data[fieldKey];
 
-    if (!field) continue; // Skip if field is undefined
+    if (!field) continue;
 
     const isRequired = field.required || (isExistingTask && fieldKey === 'completed');
 
-    const isError =
-      isRequired &&
-      ((typeof field.value === 'string' && field.value.trim() === '') ||
-        typeof field.value === 'boolean' && field.value === null);
+    let isError = false;
+
+    if (isRequired) {
+      if (typeof field.value === 'string') {
+        isError = field.value.trim() === '';
+      } else if (field.value === null || field.value === undefined) {
+        isError = true;
+      }
+    }
 
     validatedData[fieldKey] = { ...field, error: isError };
   }
 
   return validatedData as TaskFormData;
 };
+
 
 

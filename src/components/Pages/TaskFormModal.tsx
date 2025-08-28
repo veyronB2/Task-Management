@@ -95,6 +95,9 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onClose, initialDat
     setFormData(updatedFormData);
 
     const isFormValid = !Object.values(updatedFormData).some((field) => field?.error);
+
+    console.log("isFormValid", isFormValid);
+    
     if (!isFormValid) return;
 
     enqueueSnackbar('Submitting task...', { variant: 'info' });
