@@ -21,7 +21,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     }
 
     render() {
-        if (!!this.state.error) {
+        if (this.state.error) {
             return <Box
                 width="100%"
                 height="100vh"

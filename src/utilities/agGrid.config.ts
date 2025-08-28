@@ -2,7 +2,7 @@ import { ColDef, GridOptions } from "ag-grid-community";
 import { formatDisplayDate, getNoOverlayNoRowsTemplate } from "./utitlities";
 
 import { GetActionIcons } from "./agGrid";
-import { RowData } from "../components/ViewTasks";
+import { RowData } from "../components/TaskTable";
 
 export const columnDefs: ColDef<RowData>[] = [
     { field: "id", headerName: "Task ID", filter: "agTextColumnFilter" },
@@ -26,9 +26,10 @@ export const columnDefs: ColDef<RowData>[] = [
 export const gridOptions: GridOptions = {
     overlayNoRowsTemplate: getNoOverlayNoRowsTemplate({ entity: "tasks" }),
     domLayout: "normal",
-    paginationPageSize: 20,
+    paginationPageSize: 5,
     suppressCellFocus: true,
     pagination: true,
+    paginationPageSizeSelector: [5, 10, 15],
     defaultColDef: {
         flex: 1,
         resizable: true

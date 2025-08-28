@@ -1,22 +1,8 @@
-import {
-    AllCommunityModule,
-    CellClickedEvent,
-    ModuleRegistry,
-} from "ag-grid-community";
+import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
-import {
-    Box,
-    Paper,
-} from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import TaskFormModal, { TaskFormData } from "./TaskFormModal";
-import {
-    closeConfirmDialog,
-    closeModal,
-    fetchTasks,
-    openConfirmDialog,
-    openModal,
-    removeTask,
-} from "../redux/tasksReducer";
+import { closeConfirmDialog, closeModal, fetchTasks, openConfirmDialog, openModal, removeTask } from "../redux/tasksReducer";
 import { columnDefs, gridOptions } from "../utilities/agGrid.config";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useCallback, useEffect, useRef } from "react";
@@ -28,7 +14,7 @@ import HeroBanner from "./HeroBanner";
 import { Task } from "../mock-api";
 import { enqueueSnackbar } from "notistack";
 import { format } from "date-fns";
-import { isEmpty } from "lodash";
+import { getTaskDataById } from "../utilities/utitlities";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -39,17 +25,17 @@ export interface RowData extends Task {
 }
 
 const TaskTable = () => {
+    const gridRef = useRef<AgGridReact>(null);
     const dispatch: ThunkDispatch<any, any, AnyAction> = useAppDispatch();
+
     const {
         tasks,
         loading,
         modalOpen,
-        selectedTaskData,
+        tasksData,
         confirmDialogOpen,
         taskToDelete,
     } = useAppSelector(state => state.tasks);
-
-    const gridRef = useRef<AgGridReact>(null);
 
     const loadTasks = useCallback(() => {
         if (!gridRef.current) return;
@@ -60,35 +46,30 @@ const TaskTable = () => {
         loadTasks();
     }, [loadTasks]);
 
-    const handleCellClick = useCallback(
-        (event: CellClickedEvent<Task>) => {
-            const rowData = event.data;
+    const handleEditClick = useCallback((taskId: string) => {
+        const rowData = getTaskDataById(tasks ?? [], taskId);
 
-            if (event.colDef.colId === "actions") return;
-
-            if (!isEmpty(rowData)) {
-                const formData: TaskFormData = {
-                    title: { value: rowData.title, ...staticFieldValues },
-                    dueDate: {
-                        value: rowData.dueDate ? format(new Date(rowData.dueDate), "yyyy-MM-dd'T'HH:mm") : "",
-                        ...staticFieldValues,
-                        required: true
-                    },
-                    description: { value: rowData.description || "", ...staticFieldValues },
-                    completed: { value: rowData.isCompleted ? "true" : "false", ...staticFieldValues },
-                    id: { value: rowData.id, ...staticFieldValues },
-                };
-                dispatch(openModal(formData));
-            }
-        },
-        [dispatch]
-    );
+        if (rowData) {
+            const formData: TaskFormData = {
+                title: { value: rowData.title, ...staticFieldValues },
+                dueDate: {
+                    value: rowData.dueDate ? format(new Date(rowData.dueDate), "yyyy-MM-dd'T'HH:mm") : "",
+                    ...staticFieldValues,
+                    required: true,
+                },
+                description: { value: rowData.description || "", ...staticFieldValues },
+                completed: { value: rowData.isCompleted ? "true" : "false", ...staticFieldValues },
+                id: { value: rowData.id, ...staticFieldValues },
+            };
+            dispatch(openModal(formData));
+        }
+    }, [dispatch, tasks]);
 
     const handleCloseModal = useCallback(() => {
         dispatch(closeModal());
     }, [dispatch]);
 
-    const onDeleteItemIconClick = useCallback((taskId: string) => {
+    const handleDeleteClick = useCallback((taskId: string) => {
         dispatch(openConfirmDialog(taskId));
     }, [dispatch]);
 
@@ -117,7 +98,7 @@ const TaskTable = () => {
     return (
         <Box display="flex" flexDirection="column" width="100%" paddingLeft="3rem" paddingRight="3rem">
             <HeroBanner title="View All Tasks" />
-            <FormActionButtons handleOpenFormModal={handleOpenFormModal} onRefreshClick={loadTasks} />
+            <FormActionButtons handleOpenFormModal={handleOpenFormModal} />
             <Paper sx={{ mt: 4, padding: "4rem" }}>
                 <div className="ag-theme-alpine" style={{ height: 500, width: "100%" }}>
                     <AgGridReact
@@ -126,15 +107,14 @@ const TaskTable = () => {
                         columnDefs={columnDefs}
                         loading={loading}
                         rowData={tasks}
-                        onCellClicked={handleCellClick}
-                        context={{ onDeleteItemIconClick }}
+                        context={{ handleDeleteClick, handleEditClick }}
                     />
                 </div>
             </Paper>
             <TaskFormModal
                 open={modalOpen}
                 onClose={handleCloseModal}
-                taskData={selectedTaskData}
+                taskData={tasksData}
                 onTaskComplete={loadTasks}
             />
             <ConfirmDialog

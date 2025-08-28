@@ -8,7 +8,7 @@ interface TasksState {
     loading: boolean;
     error: string | null;
     modalOpen: boolean;
-    selectedTaskData: TaskFormData | null;
+    tasksData: TaskFormData | null;
     confirmDialogOpen: boolean;
     taskToDelete: string | null;
 }
@@ -18,7 +18,7 @@ const initialState: TasksState = {
     loading: false,
     error: null,
     modalOpen: false,
-    selectedTaskData: null,
+    tasksData: null,
     confirmDialogOpen: false,
     taskToDelete: null,
 };
@@ -46,11 +46,11 @@ const taskSlice = createSlice({
     reducers: {
         openModal(state, action: PayloadAction<TaskFormData | null>) {
             state.modalOpen = true;
-            state.selectedTaskData = action.payload;
+            state.tasksData = action.payload;
         },
         closeModal(state) {
             state.modalOpen = false;
-            state.selectedTaskData = null;
+            state.tasksData = null;
         },
         openConfirmDialog(state, action: PayloadAction<string>) {
             state.confirmDialogOpen = true;

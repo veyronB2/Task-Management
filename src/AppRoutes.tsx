@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 
 import Home from "./components/Home";
 import React from "react";
-import ViewTasks from "./components/ViewTasks";
+import ViewTasks from "./components/TaskTable";
 import { viewTasksPath } from "./utilities/constants";
 
 const AppRoutes: React.FC = () => {

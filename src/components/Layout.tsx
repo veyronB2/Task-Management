@@ -1,5 +1,3 @@
-// Layout.tsx
-
 import React, { ReactNode } from "react";
 
 import { Box } from "@mui/material";
