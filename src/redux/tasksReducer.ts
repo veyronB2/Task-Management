@@ -1,24 +1,20 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Task, deleteTask, getTasks } from "../mock-api";
 
-import { TaskFormData } from "../components/TaskFormModal";
-
 interface TasksState {
-    tasks: Task[] | null;
+    data: Task[] | null;
     loading: boolean;
     error: string | null;
     modalOpen: boolean;
-    tasksData: TaskFormData | null;
     confirmDialogOpen: boolean;
     taskToDelete: string | null;
 }
 
 const initialState: TasksState = {
-    tasks: null,
+    data: null,
     loading: false,
     error: null,
     modalOpen: false,
-    tasksData: null,
     confirmDialogOpen: false,
     taskToDelete: null,
 };
@@ -44,13 +40,11 @@ const taskSlice = createSlice({
     name: "tasks",
     initialState,
     reducers: {
-        openModal(state, action: PayloadAction<TaskFormData | null>) {
+        openModal(state) {
             state.modalOpen = true;
-            state.tasksData = action.payload;
         },
         closeModal(state) {
             state.modalOpen = false;
-            state.tasksData = null;
         },
         openConfirmDialog(state, action: PayloadAction<string>) {
             state.confirmDialogOpen = true;
@@ -68,7 +62,7 @@ const taskSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchTasks.fulfilled, (state, action: PayloadAction<Task[]>) => {
-                state.tasks = action.payload;
+                state.data = action.payload;
                 state.loading = false;
             })
             .addCase(fetchTasks.rejected, (state, action) => {
@@ -76,16 +70,11 @@ const taskSlice = createSlice({
                 state.error = action.payload as string;
             })
             .addCase(removeTask.fulfilled, (state, action: PayloadAction<string>) => {
-                state.tasks = state.tasks?.filter(task => task.id !== action.payload) || null;
+                state.data = state.data?.filter(task => task.id !== action.payload) || null;
             });
     },
 });
 
-export const {
-    openModal,
-    closeModal,
-    openConfirmDialog,
-    closeConfirmDialog,
-} = taskSlice.actions;
+export const { openModal, closeModal, openConfirmDialog, closeConfirmDialog } = taskSlice.actions;
 
 export default taskSlice.reducer;

@@ -5,7 +5,7 @@ import HeroBanner from "./HeroBanner";
 import { useNavigate } from "react-router-dom";
 import { viewTasksPath } from "../utilities/constants";
 
-const HomePage: React.FC = () => {
+const Home: React.FC = () => {
     const navigate = useNavigate();
 
     const handleViewTasksClick = useCallback(() => {
@@ -32,4 +32,4 @@ const HomePage: React.FC = () => {
     );
 };
 
-export default HomePage;
+export default Home;

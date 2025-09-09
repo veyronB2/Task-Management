@@ -1,0 +1,8 @@
+.snackbar-close-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    &:hover {
+        color: white;
+    }
+}

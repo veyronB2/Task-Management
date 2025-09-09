@@ -1,4 +1,4 @@
-import "./index.css";
+import "../src/styles/index.css";
 
 import App from "./App.tsx";
 import AppProviders from "./AppProviders.tsx";

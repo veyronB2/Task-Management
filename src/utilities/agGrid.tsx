@@ -1,4 +1,4 @@
-import { AgGridActionIcon } from "../components/AgGridIcon";
+import { AgGridActionIcon } from "../components/AgGridActionIcon";
 import { ICellRendererParams } from "ag-grid-community";
 import { Task } from "../mock-api";
 import { useCallback } from "react";

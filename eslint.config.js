@@ -86,9 +86,6 @@ const eslintConfig = tseslint.config(
             "react-hooks/rules-of-hooks": "error",
             "react/display-name": "off",
             "react/react-in-jsx-scope": "off",
-            "react-refresh/only-export-components": ["warn", {
-                allowConstantExport: true
-            }],
             "react/self-closing-comp": ["error", {
                 "component": true,
                 "html": true

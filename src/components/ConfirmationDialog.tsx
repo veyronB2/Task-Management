@@ -17,7 +17,7 @@ interface ConfirmDialogProps {
     onCancel: () => void;
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
     open,
     title = "Confirm",
     message,
@@ -42,4 +42,4 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     );
 };
 
-export default ConfirmDialog;
+export default ConfirmationDialog;

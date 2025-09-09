@@ -1,6 +1,8 @@
 import { Task } from "../mock-api";
-import { TaskFormData } from "../components/TaskFormModal";
 import { format } from "date-fns";
+
+//import { TaskFormData } from "../components/TaskFormModal";
+
 
 interface GetNoOverlayNoRowsTemplateProps {
     entity?: string;
@@ -13,32 +15,32 @@ export const getNoOverlayNoRowsTemplate = ( { entity, customMessage }: GetNoOver
 };
 
 
-export const validateForm = (data: TaskFormData, isExistingTask: boolean): TaskFormData => {
-    const validatedData: Partial<TaskFormData> = {};
+// export const validateForm = (data: TaskFormData, isExistingTask: boolean): TaskFormData => {
+//     const validatedData: Partial<TaskFormData> = {};
 
-    for (const key in data) {
-        const fieldKey = key as keyof TaskFormData;
-        const field = data[fieldKey];
+//     for (const key in data) {
+//         const fieldKey = key as keyof TaskFormData;
+//         const field = data[fieldKey];
 
-        if (!field) continue;
+//         if (!field) continue;
 
-        const isRequired = field.required || (isExistingTask && fieldKey === "completed");
+//         const isRequired = field.required || (isExistingTask && fieldKey === "completed");
 
-        let isError = false;
+//         let isError = false;
 
-        if (isRequired) {
-            if (typeof field.value === "string") {
-                isError = field.value.trim() === "";
-            } else if (field.value === null || field.value === undefined) {
-                isError = true;
-            }
-        }
+//         if (isRequired) {
+//             if (typeof field.value === "string") {
+//                 isError = field.value.trim() === "";
+//             } else if (field.value === null || field.value === undefined) {
+//                 isError = true;
+//             }
+//         }
 
-        validatedData[fieldKey] = { ...field, error: isError };
-    }
+//         validatedData[fieldKey] = { ...field, error: isError };
+//     }
 
-    return validatedData as TaskFormData;
-};
+//     return validatedData as TaskFormData;
+// };
 
 export const formatDisplayDate = (dateString: string): string => {
     try {

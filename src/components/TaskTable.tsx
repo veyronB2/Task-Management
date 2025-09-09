@@ -5,7 +5,7 @@ import TaskFormModal, { TaskFormData } from "./TaskFormModal";
 import { closeConfirmDialog, closeModal, fetchTasks, openConfirmDialog, openModal, removeTask } from "../redux/tasksReducer";
 import { columnDefs, gridOptions } from "../utilities/agGrid.config";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { AgGridReact } from "ag-grid-react";
 import ConfirmDialog from "./ConfirmationDialog";
@@ -18,8 +18,6 @@ import { getTaskDataById } from "../utilities/utitlities";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const staticFieldValues = { required: false, error: false };
-
 export interface RowData extends Task {
     actions: null;
 }
@@ -28,45 +26,44 @@ const TaskTable = () => {
     const gridRef = useRef<AgGridReact>(null);
     const dispatch: ThunkDispatch<any, any, AnyAction> = useAppDispatch();
 
+    const [taskDataNew, setTaskDataNew] = useState<TaskFormData | null>(null);
+
     const {
-        tasks,
+        data,
         loading,
         modalOpen,
-        tasksData,
         confirmDialogOpen,
         taskToDelete,
     } = useAppSelector(state => state.tasks);
 
-    const loadTasks = useCallback(() => {
+    const getTasks = useCallback(() => {
         if (!gridRef.current) return;
         dispatch(fetchTasks());
     }, [dispatch]);
 
     useEffect(() => {
-        loadTasks();
-    }, [loadTasks]);
+        getTasks();
+    }, [getTasks]);
 
     const handleEditClick = useCallback((taskId: string) => {
-        const rowData = getTaskDataById(tasks ?? [], taskId);
+        const rowData = getTaskDataById(data ?? [], taskId);
 
         if (rowData) {
             const formData: TaskFormData = {
-                title: { value: rowData.title, ...staticFieldValues },
-                dueDate: {
-                    value: rowData.dueDate ? format(new Date(rowData.dueDate), "yyyy-MM-dd'T'HH:mm") : "",
-                    ...staticFieldValues,
-                    required: true,
-                },
-                description: { value: rowData.description || "", ...staticFieldValues },
-                completed: { value: rowData.isCompleted ? "true" : "false", ...staticFieldValues },
-                id: { value: rowData.id, ...staticFieldValues },
+                title: rowData.title,
+                dueDate: rowData.dueDate ? format(new Date(rowData.dueDate), "yyyy-MM-dd'T'HH:mm") : "",
+                description: rowData.description ?? "",
+                completed: rowData.isCompleted ? "true" : "false",
+                id: rowData.id,
             };
-            dispatch(openModal(formData));
+            setTaskDataNew(formData);
+            dispatch(openModal());
         }
-    }, [dispatch, tasks]);
+    }, [dispatch, data]);
 
     const handleCloseModal = useCallback(() => {
         dispatch(closeModal());
+        setTaskDataNew(null);
     }, [dispatch]);
 
     const handleDeleteClick = useCallback((taskId: string) => {
@@ -92,7 +89,7 @@ const TaskTable = () => {
     }, [dispatch]);
 
     const handleOpenFormModal = useCallback(() => {
-        dispatch(openModal(null));
+        dispatch(openModal());
     }, [dispatch]);
 
     return (
@@ -106,16 +103,16 @@ const TaskTable = () => {
                         gridOptions={gridOptions}
                         columnDefs={columnDefs}
                         loading={loading}
-                        rowData={tasks}
+                        rowData={data}
                         context={{ handleDeleteClick, handleEditClick }}
                     />
                 </div>
             </Paper>
             <TaskFormModal
                 open={modalOpen}
-                onClose={handleCloseModal}
-                taskData={tasksData}
-                onTaskComplete={loadTasks}
+                onCancel={handleCloseModal}
+                taskData={taskDataNew}
+                onTaskComplete={getTasks}
             />
             <ConfirmDialog
                 open={confirmDialogOpen}
