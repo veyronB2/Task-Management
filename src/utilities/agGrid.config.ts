@@ -2,7 +2,7 @@ import { ColDef, GridOptions } from "ag-grid-community";
 import { formatDisplayDate, getNoOverlayNoRowsTemplate } from "./utitlities";
 
 import { GetActionIcons } from "./agGrid";
-import { RowData } from "../components/TaskTable";
+import { RowData } from "../components/table/TaskTable";
 
 export const columnDefs: ColDef<RowData>[] = [
     { field: "id", headerName: "Task ID", filter: "agTextColumnFilter" },

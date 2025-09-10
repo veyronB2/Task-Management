@@ -1,20 +1,20 @@
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { Box, Paper } from "@mui/material";
-import TaskFormModal, { TaskFormData } from "./TaskFormModal";
-import { closeConfirmDialog, closeModal, fetchTasks, openConfirmDialog, openModal, removeTask } from "../redux/tasksReducer";
-import { columnDefs, gridOptions } from "../utilities/agGrid.config";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import TaskFormModal, { TaskFormData } from "../modals/TaskFormModal";
+import { closeConfirmDialog, closeModal, fetchTasks, openConfirmDialog, openModal, removeTask } from "../../redux/tasksReducer";
+import { columnDefs, gridOptions } from "../../utilities/agGrid.config";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { AgGridReact } from "ag-grid-react";
-import ConfirmDialog from "./ConfirmationDialog";
-import FormActionButtons from "./FormActionButtons";
-import HeroBanner from "./HeroBanner";
-import { Task } from "../mock-api";
+import ConfirmDialog from "../modals/ConfirmationDialog";
+import FormActionButtons from "../FormActionButtons";
+import HeroBanner from "../HeroBanner";
+import { Task } from "../../mock-api";
 import { format } from "date-fns";
-import { getSnackbarNotification } from "../utilities/notifications";
-import { getTaskDataById } from "../utilities/utitlities";
+import { getSnackbarNotification } from "../../utilities/notifications";
+import { getTaskDataById } from "../../utilities/utitlities";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import ConfirmDialog from "../../components/ConfirmationDialog";
+import ConfirmDialog from "../../components/modals/ConfirmationDialog";
 import { vi } from "vitest";
 
 describe("ConfirmDialog", () => {

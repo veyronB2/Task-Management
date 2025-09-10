@@ -17,10 +17,10 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import React, { useCallback, useEffect } from "react";
-import { UpdateTaskData, createTask, updateTask } from "../mock-api";
+import { UpdateTaskData, createTask, updateTask } from "../../mock-api";
 
-import { getSnackbarNotification } from "../utilities/notifications";
-import { taskFormSchema } from "../schemas/taskFormSchema";
+import { getSnackbarNotification } from "../../utilities/notifications";
+import { taskFormSchema } from "../../schemas/taskFormSchema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 

@@ -1,17 +1,15 @@
+import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import React, { useMemo } from "react";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import IconButton from "@mui/material/IconButton";
-import React from "react";
 import Tooltip from "@mui/material/Tooltip";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-interface AgGridActionIconProps {
-    onClick: () => void;
+interface AgGridActionIconProps extends Omit<IconButtonProps, "children"> {
     iconType: "delete" | "edit" | "view";
-    disabled?: boolean;
     ariaLabel?: string;
     tooltip?: string;
-    color?: "inherit" | "primary" | "secondary" | "error" | "info" | "success" | "warning";
 }
 
 const iconMap = {
@@ -28,7 +26,7 @@ export const AgGridActionIcon: React.FC<AgGridActionIconProps> = ({
     tooltip,
     color
 }) => {
-    const IconComponent = iconMap[iconType];
+    const IconComponent = useMemo(() => iconMap[iconType], [iconType]);
 
     return (
         <Tooltip title={tooltip || ariaLabel || ""}>
