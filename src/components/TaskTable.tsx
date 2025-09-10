@@ -12,8 +12,8 @@ import ConfirmDialog from "./ConfirmationDialog";
 import FormActionButtons from "./FormActionButtons";
 import HeroBanner from "./HeroBanner";
 import { Task } from "../mock-api";
-import { enqueueSnackbar } from "notistack";
 import { format } from "date-fns";
+import { getSnackbarNotification } from "../utilities/notifications";
 import { getTaskDataById } from "../utilities/utitlities";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -28,22 +28,14 @@ const TaskTable = () => {
 
     const [taskDataNew, setTaskDataNew] = useState<TaskFormData | null>(null);
 
-    const {
-        data,
-        loading,
-        modalOpen,
-        confirmDialogOpen,
-        taskToDelete,
-    } = useAppSelector(state => state.tasks);
+    const { data, loading, modalOpen, confirmDialogOpen, taskToDelete } = useAppSelector(state => state.tasks);
 
     const getTasks = useCallback(() => {
         if (!gridRef.current) return;
         dispatch(fetchTasks());
     }, [dispatch]);
 
-    useEffect(() => {
-        getTasks();
-    }, [getTasks]);
+    useEffect(() => getTasks(), [getTasks]);
 
     const handleEditClick = useCallback((taskId: string) => {
         const rowData = getTaskDataById(data ?? [], taskId);
@@ -66,31 +58,23 @@ const TaskTable = () => {
         setTaskDataNew(null);
     }, [dispatch]);
 
-    const handleDeleteClick = useCallback((taskId: string) => {
-        dispatch(openConfirmDialog(taskId));
-    }, [dispatch]);
+    const handleDeleteClick = useCallback((taskId: string) => dispatch(openConfirmDialog(taskId)), [dispatch]);
+    const handleCancelDelete = useCallback(() => dispatch(closeConfirmDialog()), [dispatch]);
+    const handleOpenFormModal = useCallback(() => dispatch(openModal()), [dispatch]);
 
     const handleConfirmDelete = async () => {
         if (!taskToDelete) return;
 
         try {
             await dispatch(removeTask(taskToDelete)).unwrap();
-            enqueueSnackbar("Task deleted successfully!", { variant: "success" });
+            getSnackbarNotification({variant: "success", message: "Task deleted successfully!"});
             dispatch(fetchTasks());
         } catch {
-            enqueueSnackbar("Failed to delete task.", { variant: "error" });
+            getSnackbarNotification({variant: "error", message: "Failed to delete selected task!"});
         } finally {
             dispatch(closeConfirmDialog());
         }
     };
-
-    const handleCancelDelete = useCallback(() => {
-        dispatch(closeConfirmDialog());
-    }, [dispatch]);
-
-    const handleOpenFormModal = useCallback(() => {
-        dispatch(openModal());
-    }, [dispatch]);
 
     return (
         <Box display="flex" flexDirection="column" width="100%" paddingLeft="3rem" paddingRight="3rem">
