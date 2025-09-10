@@ -58,8 +58,8 @@ export const getSnackbarNotification = ({
 
     return enqueueSnackbar(message, {
         autoHideDuration: duration,
-        variant: variant,
-        persist: persist,
+        variant,
+        persist,
         style: {backgroundColor: getVariantColour(variant)},
         anchorOrigin: {
             vertical: verticalPosition,

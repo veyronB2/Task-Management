@@ -7,7 +7,7 @@ interface TasksState {
     error: string | null;
     modalOpen: boolean;
     confirmDialogOpen: boolean;
-    taskToDelete: string | null;
+    isDeletingTask: boolean;
 }
 
 const initialState: TasksState = {
@@ -16,7 +16,7 @@ const initialState: TasksState = {
     error: null,
     modalOpen: false,
     confirmDialogOpen: false,
-    taskToDelete: null,
+    isDeletingTask: false
 };
 
 export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async (_, { rejectWithValue }) => {
@@ -37,7 +37,7 @@ export const removeTask = createAsyncThunk("tasks/removeTask", async (taskId: st
 });
 
 const taskSlice = createSlice({
-    name: "tasks",
+    name: "taskManagement",
     initialState,
     reducers: {
         openModal(state) {
@@ -46,13 +46,11 @@ const taskSlice = createSlice({
         closeModal(state) {
             state.modalOpen = false;
         },
-        openConfirmDialog(state, action: PayloadAction<string>) {
+        openConfirmDialog(state) {
             state.confirmDialogOpen = true;
-            state.taskToDelete = action.payload;
         },
         closeConfirmDialog(state) {
             state.confirmDialogOpen = false;
-            state.taskToDelete = null;
         },
     },
     extraReducers: builder => {
@@ -71,6 +69,13 @@ const taskSlice = createSlice({
             })
             .addCase(removeTask.fulfilled, (state, action: PayloadAction<string>) => {
                 state.data = state.data?.filter(task => task.id !== action.payload) || null;
+                state.isDeletingTask = false;
+            })
+            .addCase(removeTask.pending, state => {
+                state.isDeletingTask = true;
+            })
+            .addCase(removeTask.rejected, state => {
+                state.isDeletingTask = false;
             });
     },
 });

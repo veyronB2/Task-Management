@@ -26,9 +26,10 @@ const TaskTable = () => {
     const gridRef = useRef<AgGridReact>(null);
     const dispatch: ThunkDispatch<any, any, AnyAction> = useAppDispatch();
 
-    const [taskDataNew, setTaskDataNew] = useState<TaskFormData | null>(null);
+    const [taskData, setTaskData] = useState<TaskFormData | null>(null);
+    const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
 
-    const { data, loading, modalOpen, confirmDialogOpen, taskToDelete } = useAppSelector(state => state.tasks);
+    const { data, loading, modalOpen, isDeletingTask, confirmDialogOpen } = useAppSelector(state => state.taskManagement);
 
     const getTasks = useCallback(() => {
         if (!gridRef.current) return;
@@ -48,18 +49,24 @@ const TaskTable = () => {
                 completed: rowData.isCompleted ? "true" : "false",
                 id: rowData.id,
             };
-            setTaskDataNew(formData);
+            setTaskData(formData);
             dispatch(openModal());
         }
     }, [dispatch, data]);
 
     const handleCloseModal = useCallback(() => {
         dispatch(closeModal());
-        setTaskDataNew(null);
+        setTaskData(null);
     }, [dispatch]);
 
-    const handleDeleteClick = useCallback((taskId: string) => dispatch(openConfirmDialog(taskId)), [dispatch]);
-    const handleCancelDelete = useCallback(() => dispatch(closeConfirmDialog()), [dispatch]);
+    const handleDeleteClick = useCallback((taskId: string) => {
+        dispatch(openConfirmDialog());
+        setTaskToDelete(taskId);
+    }, [dispatch]);
+    const handleCancelDelete = useCallback(() => {
+        dispatch(closeConfirmDialog());
+        setTaskToDelete(null);
+    }, [dispatch]);
     const handleOpenFormModal = useCallback(() => dispatch(openModal()), [dispatch]);
 
     const handleConfirmDelete = useCallback(async () => {
@@ -95,7 +102,7 @@ const TaskTable = () => {
             <TaskFormModal
                 open={modalOpen}
                 onCancel={handleCloseModal}
-                taskData={taskDataNew}
+                taskData={taskData}
                 onTaskComplete={getTasks}
             />
             <ConfirmDialog
@@ -103,6 +110,7 @@ const TaskTable = () => {
                 message="Are you sure you want to delete this task?"
                 onConfirm={handleConfirmDelete}
                 onCancel={handleCancelDelete}
+                btnDisabled={isDeletingTask}
             />
         </Box>
     );

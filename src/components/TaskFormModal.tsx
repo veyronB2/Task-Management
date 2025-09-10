@@ -60,7 +60,7 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onCancel, taskData,
     }, [reset, taskData]);
 
     const onSubmit = useCallback(async (data: TaskFormData) => {
-        getSnackbarNotification({ persist: true, variant: "info", message: "Task has been submitted" });
+        getSnackbarNotification({ variant: "info", message: "Task has been submitted" });
         const { id, dueDate, completed } = data;
         const successMessage = `Task ${id ? "updated" : "created"} successfully!`;
 
@@ -76,7 +76,7 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onCancel, taskData,
                     isCompleted: completed === "true" ? true : false
                 };
                 await updateTask(id, payload);
-                getSnackbarNotification({ persist: true, variant: "success", message: successMessage, closeBtnText: "Dismiss" });
+                getSnackbarNotification({ variant: "success", message: successMessage, closeBtnText: "Dismiss" });
             } else {
                 await createTask(basePayload);
                 getSnackbarNotification({ variant: "success", message: successMessage });

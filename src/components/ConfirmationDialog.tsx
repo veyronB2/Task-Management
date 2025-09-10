@@ -15,7 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
-export interface ButtonConfig extends Pick<ButtonProps, "color" | "variant" | "onClick" | "startIcon"> {
+export interface ButtonConfig extends Pick<ButtonProps, "color" | "variant" | "onClick" | "startIcon" | "disabled"> {
     text: string;
 }
 
@@ -27,6 +27,7 @@ interface ConfirmDialogProps {
     onConfirm?: () => void;
     buttons?: ButtonConfig[];
     titleIcon?: boolean;
+    btnDisabled?: boolean;
 }
 
 const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
@@ -36,7 +37,8 @@ const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
     onCancel,
     buttons,
     onConfirm,
-    titleIcon = true
+    titleIcon = true,
+    btnDisabled = false
 }) => {
 
     const defaultButtons: ButtonConfig[] = useMemo(() => {
@@ -76,10 +78,10 @@ const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
                 <DialogContentText>{message}</DialogContentText>
             </DialogContent>
             <DialogActions>
-                {(buttons ?? defaultButtons).map((config, index) => {
+                {(buttons ?? defaultButtons).map(config => {
                     const { text, ...btnProps } = config;
                     return (
-                        <Button key={index} {...btnProps}>
+                        <Button key={text} {...btnProps} disabled={btnDisabled}>
                             {text}
                         </Button>
                     );
