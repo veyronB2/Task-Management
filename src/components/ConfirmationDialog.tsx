@@ -1,42 +1,89 @@
 import {
+    Box,
     Button,
+    ButtonProps,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
+    Typography,
 } from "@mui/material";
+import React, { useMemo } from "react";
 
-import React from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+
+export interface ButtonConfig extends Pick<ButtonProps, "color" | "variant" | "onClick" | "startIcon"> {
+    text: string;
+}
 
 interface ConfirmDialogProps {
     open: boolean;
     title?: string;
     message: string;
-    onConfirm: () => void;
     onCancel: () => void;
+    onConfirm?: () => void;
+    buttons?: ButtonConfig[];
+    titleIcon?: boolean;
 }
 
 const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
     open,
     title = "Confirm",
     message,
-    onConfirm,
     onCancel,
+    buttons,
+    onConfirm,
+    titleIcon = true
 }) => {
+
+    const defaultButtons: ButtonConfig[] = useMemo(() => {
+        const buttons: ButtonConfig[] = [
+            {
+                text: "Cancel",
+                color: "primary",
+                variant: "outlined",
+                onClick: onCancel,
+                startIcon: <CloseIcon />,
+            },
+        ];
+        if (onConfirm) {
+            buttons.push({
+                text: "Delete",
+                color: "error",
+                variant: "contained",
+                onClick: onConfirm,
+                startIcon: <DeleteIcon />,
+            });
+        }
+
+        return buttons;
+    }, [onCancel, onConfirm]);
+
     return (
         <Dialog open={open} onClose={onCancel} maxWidth="xs" fullWidth>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle>
+                <Box display="flex" alignItems="center" p={1} borderRadius={1}>
+                    {titleIcon && <WarningAmberIcon sx={{ color: "gold", mr: 1 }} />}
+                    <Typography variant="h1" component="span" fontSize={"1.3rem"} letterSpacing={"0.1rem"} fontWeight={"500"}>
+                        {title ? `${title}!` : "Confirm!"}
+                    </Typography>
+                </Box>
+            </DialogTitle>
             <DialogContent>
                 <DialogContentText>{message}</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onCancel} color="primary">
-                    Cancel
-                </Button>
-                <Button onClick={onConfirm} color="error" variant="contained">
-                    Delete
-                </Button>
+                {(buttons ?? defaultButtons).map((config, index) => {
+                    const { text, ...btnProps } = config;
+                    return (
+                        <Button key={index} {...btnProps}>
+                            {text}
+                        </Button>
+                    );
+                })}
             </DialogActions>
         </Dialog>
     );

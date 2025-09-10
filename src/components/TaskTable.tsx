@@ -62,7 +62,7 @@ const TaskTable = () => {
     const handleCancelDelete = useCallback(() => dispatch(closeConfirmDialog()), [dispatch]);
     const handleOpenFormModal = useCallback(() => dispatch(openModal()), [dispatch]);
 
-    const handleConfirmDelete = async () => {
+    const handleConfirmDelete = useCallback(async () => {
         if (!taskToDelete) return;
 
         try {
@@ -74,10 +74,10 @@ const TaskTable = () => {
         } finally {
             dispatch(closeConfirmDialog());
         }
-    };
+    }, [dispatch, taskToDelete]);
 
     return (
-        <Box display="flex" flexDirection="column" width="100%" paddingLeft="3rem" paddingRight="3rem">
+        <Box display="flex" flexDirection="column" width="100%" px="3rem">
             <HeroBanner title="View All Tasks" />
             <FormActionButtons handleOpenFormModal={handleOpenFormModal} />
             <Paper sx={{ mt: 4, padding: "4rem" }}>
