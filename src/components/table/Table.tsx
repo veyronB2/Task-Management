@@ -15,11 +15,6 @@ const defaultGridStyle: CSSProperties = {
     width: "100%"
 };
 
-const columnDefsDefaults: ColDef = {
-    flex: 1,
-};
-
-
 export interface TableProps<T> extends Omit<AgGridReactProps<T>, "rowData" | "columnDefs" > {
     rowData: T[];
     columnDefs: (ColDef<T> | ColGroupDef<T>)[];
@@ -53,7 +48,7 @@ const Table = <T,>({
                 ref={ref}
                 rowData={rowData}
                 columnDefs={columnDefs}
-                defaultColDef={defaultColDef ?? columnDefsDefaults}
+                defaultColDef={defaultColDef}
                 {...rest}
             />
         </div>

@@ -1,33 +1,31 @@
 import "ag-grid-community/styles/ag-theme-material.css";
 
-import { AllCommunityModule, ColDef, GridOptions, ModuleRegistry } from "ag-grid-community";
+import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { Box, Paper } from "@mui/material";
 import TaskFormModal, { TaskFormData } from "../modals/TaskFormModal";
 import { closeConfirmDialog, closeModal, fetchTasks, openConfirmDialog, openModal, removeTask } from "../../redux/tasksReducer";
-import { formatDisplayDate, getNoOverlayNoRowsTemplate, getTaskDataById } from "../../utilities/utitlities";
+import { columnDefs, gridOptions, gridOptionsMobile, mobileColumnDefs } from "../../configs/taskTableGridConfig";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { AgGridReact } from "ag-grid-react";
 import ConfirmDialog from "../modals/ConfirmationDialog";
 import FormActionButtons from "../FormActionButtons";
-import { GetActionIcons } from "../../utilities/agGrid";
 import HeroBanner from "../HeroBanner";
+import { RowGroupingModule } from "ag-grid-enterprise";
 import Table from "./Table";
-import { Task } from "../../mock-api";
 import { format } from "date-fns";
 import { getSnackbarNotification } from "../../utilities/notifications";
+import { getTaskDataById } from "../../utilities/utitlities";
+import { getTransformedData } from "../../utilities/taskTable";
 
-ModuleRegistry.registerModules([AllCommunityModule]);
-
-export interface RowData extends Task {
-    actions: null;
-}
+ModuleRegistry.registerModules([AllCommunityModule, RowGroupingModule]);
 
 const TaskTable = () => {
     const gridRef = useRef<AgGridReact>(null);
     const dispatch: ThunkDispatch<any, any, AnyAction> = useAppDispatch();
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     const [taskData, setTaskData] = useState<TaskFormData | null>(null);
     const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
@@ -40,6 +38,12 @@ const TaskTable = () => {
     }, [dispatch]);
 
     useEffect(() => getTasks(), [getTasks]);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const handleEditClick = useCallback((taskId: string) => {
         const rowData = getTaskDataById(data ?? [], taskId);
@@ -88,43 +92,14 @@ const TaskTable = () => {
         }
     }, [dispatch, taskToDelete]);
 
-    const gridOptions: GridOptions = useMemo(() => {
-        return {
-            overlayNoRowsTemplate: getNoOverlayNoRowsTemplate({ entity: "tasks" }),
-            domLayout: "normal",
-            paginationPageSize: 5,
-            suppressCellFocus: true,
-            pagination: true,
-            paginationPageSizeSelector: [5, 10, 15],
-            defaultColDef: {
-                flex: 1,
-                resizable: true,
-                filter: "agTextColumnFilter",
-                filterParams: { buttons: ["reset"] }
-            },
-        };
-    }, []);
+    //Reset AG Grid internal row grouping state when switching between mobile and desktop sizes
+    useEffect(() => {
+        if (!gridRef.current?.api) return;
 
-    const columnDefs: ColDef<RowData>[] = useMemo(() => {
-        return [
-            { field: "id", headerName: "Task ID" },
-            { field: "title" },
-            { field: "dueDate", headerName: "Due Date", valueFormatter: (params) => formatDisplayDate(params.value) },
-            { field: "description" },
-            { field: "isCompleted", headerName: "Completed" },
-            {
-                headerName: "Actions",
-                colId: "actions",
-                suppressHeaderMenuButton: true,
-                suppressHeaderContextMenu: true,
-                filter: false,
-                sortable: false,
-                suppressMovable: true,
-                resizable: false,
-                cellRenderer: GetActionIcons,
-            },
-        ];
-    }, []);
+        if (!isMobile) {
+            gridRef.current.api.setGridOption("treeData", false);
+        }
+    }, [isMobile]);
 
     return (
         <Box display="flex" flexDirection="column" width="100%" px="3rem">
@@ -132,12 +107,14 @@ const TaskTable = () => {
             <FormActionButtons handleOpenFormModal={handleOpenFormModal} />
             <Paper sx={{ mt: 4, padding: "4rem" }}>
                 <Table
+                    key={isMobile ? "mobile" : "desktop"}
                     gridRef={gridRef}
-                    rowData={data ?? []}
-                    columnDefs={columnDefs}
-                    gridOptions={gridOptions}
+                    rowData={getTransformedData(data, isMobile) ?? []}
+                    columnDefs={!isMobile ? columnDefs : mobileColumnDefs}
+                    gridOptions={!isMobile ? gridOptions : gridOptionsMobile}
                     context={{ handleDeleteClick, handleEditClick }}
                     loading={loading}
+                    pagination={!isMobile}
                 />
             </Paper>
             <TaskFormModal

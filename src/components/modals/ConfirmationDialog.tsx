@@ -15,7 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
-export interface ButtonConfig extends Pick<ButtonProps, "color" | "variant" | "onClick" | "startIcon" | "disabled"> {
+export interface ButtonConfig extends Pick<ButtonProps, "color" | "variant" | "onClick" | "endIcon" | "disabled"> {
     text: string;
 }
 
@@ -48,7 +48,7 @@ const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
                 color: "primary",
                 variant: "outlined",
                 onClick: onCancel,
-                startIcon: <CloseIcon />,
+                endIcon: <CloseIcon />,
             },
         ];
         if (onConfirm) {
@@ -57,7 +57,7 @@ const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
                 color: "error",
                 variant: "contained",
                 onClick: onConfirm,
-                startIcon: <DeleteIcon />,
+                endIcon: <DeleteIcon />,
             });
         }
 
