@@ -1,6 +1,7 @@
-import { ColDef, GridOptions } from "ag-grid-community";
+import { ColDef, GridOptions, ICellRendererParams } from "ag-grid-community";
 import { GetActionIcons, getNoOverlayNoRowsTemplate } from "../utilities/agGrid";
 
+import CheckBoxRenderer from "../components/table/CheckBoxRenderer";
 import { Task } from "../mock-api";
 import { formatDisplayDate } from "../utilities/utitlities";
 import { getDataPath } from "../utilities/taskTable";
@@ -51,7 +52,19 @@ export interface RowData extends Task {
 }
 
 export const mobileColumnDefs: ColDef<RowDataMobile>[] = [
-    { field: "value"},
+    { field: "value",
+        cellRenderer: (params: ICellRendererParams) => {
+            const value = params.value;
+
+            if (typeof value === "boolean") {
+                return CheckBoxRenderer(value);
+
+            } else if (typeof value === "string" && !isNaN(Date.parse(value))) {
+                return formatDisplayDate(value);
+            }
+            return value;
+        }
+    },
 ];
 
 export const columnDefs: ColDef<RowData>[] = [
