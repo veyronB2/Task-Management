@@ -7,8 +7,19 @@ import { useCallback } from "react";
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
 
-export const GetActionIcons = (params: ICellRendererParams<Task> ) => {
-    const taskId = (params.data as Task).id?.toString();
+interface GetActionsIconsProps extends Task {
+    path: string;
+}
+export const GetActionIcons = (params: ICellRendererParams<GetActionsIconsProps> ) => {
+
+    let taskId: string | undefined;
+    if (params.data?.path) {
+        // Mobile view
+        taskId = params.data.path[0];
+    } else {
+        // Desktop view
+        taskId = (params.data as Task).id?.toString();
+    }
 
     const handleDeleteClick = useCallback(() => {
         params.context.handleDeleteClick(taskId);

@@ -32,6 +32,7 @@ export const gridOptionsMobile: GridOptions = {
     },
     autoGroupColumnDef: {
         headerName: "Task ID",
+        resizable: false,
         suppressHeaderContextMenu: true,
         cellRendererParams: {
             suppressCount: true,
@@ -52,15 +53,15 @@ export interface RowData extends Task {
 }
 
 export const mobileColumnDefs: ColDef<RowDataMobile>[] = [
-    { field: "value",
+    { field: "value", resizable: false,
         cellRenderer: (params: ICellRendererParams) => {
             const value = params.value;
-
             if (typeof value === "boolean") {
                 return CheckBoxRenderer(value);
-
             } else if (typeof value === "string" && !isNaN(Date.parse(value))) {
                 return formatDisplayDate(value);
+            } else if (params.data?.path.includes("Actions")) {
+                return GetActionIcons(params);
             }
             return value;
         }
