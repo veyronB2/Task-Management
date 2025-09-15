@@ -109,7 +109,7 @@ const TaskTable = () => {
                 <Table
                     key={isMobile ? "mobile" : "desktop"}
                     gridRef={gridRef}
-                    rowData={getTransformedData(data, isMobile) ?? []}
+                    rowData={getTransformedData(data, isMobile, columnDefs) ?? []}
                     columnDefs={!isMobile ? columnDefs : mobileColumnDefs}
                     gridOptions={!isMobile ? gridOptions : gridOptionsMobile}
                     context={{ handleDeleteClick, handleEditClick }}

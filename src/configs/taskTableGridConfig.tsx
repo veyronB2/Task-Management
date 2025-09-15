@@ -46,7 +46,7 @@ interface RowDataMobile {
     value: any;
 }
 
-interface RowData extends Task {
+export interface RowData extends Task {
     actions: null;
 }
 
