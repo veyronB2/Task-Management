@@ -6,6 +6,7 @@ import { Box, Paper } from "@mui/material";
 import TaskFormModal, { TaskFormData } from "../modals/TaskFormModal";
 import { closeConfirmDialog, closeModal, fetchTasks, openConfirmDialog, openModal, removeTask } from "../../redux/tasksReducer";
 import { columnDefs, gridOptions, gridOptionsMobile, mobileColumnDefs } from "../../configs/taskTableGridConfig";
+import { getTaskDataById, getTransformedData } from "../../utilities/taskTable";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -17,8 +18,6 @@ import { RowGroupingModule } from "ag-grid-enterprise";
 import Table from "./Table";
 import { format } from "date-fns";
 import { getSnackbarNotification } from "../../utilities/notifications";
-import { getTaskDataById } from "../../utilities/utitlities";
-import { getTransformedData } from "../../utilities/taskTable";
 
 ModuleRegistry.registerModules([AllCommunityModule, RowGroupingModule]);
 
