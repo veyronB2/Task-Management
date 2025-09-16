@@ -12,8 +12,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { AgGridReact } from "ag-grid-react";
 import ConfirmDialog from "../modals/ConfirmationDialog";
-import FormActionButtons from "../FormActionButtons";
-import HeroBanner from "../HeroBanner";
+import FormActionButtons from "../modals/FormActionButtons";
+import HeroBanner from "../layout/HeroBanner";
 import { RowGroupingModule } from "ag-grid-enterprise";
 import Table from "./Table";
 import { format } from "date-fns";

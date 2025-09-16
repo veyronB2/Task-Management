@@ -1,6 +1,6 @@
 import AppRoutes from "./AppRoutes";
 import ErrorBoundary from "./ErrorBoundry";
-import Layout from "./components/Layout";
+import Layout from "./components/layout/Layout";
 
 const App = () => {
 

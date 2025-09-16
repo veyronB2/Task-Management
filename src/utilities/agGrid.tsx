@@ -1,7 +1,7 @@
 import { AllEnterpriseModule, ModuleRegistry } from "ag-grid-enterprise";
 import { ICellRendererParams, SideBarDef, ToolPanelDef } from "ag-grid-community";
 
-import { AgGridActionIcon } from "../components/table/AgGridActionIcon";
+import { AgGridActionIcon } from "../components/agGrid/AgGridActionIcon";
 import { Task } from "../mock-api";
 import { useCallback } from "react";
 

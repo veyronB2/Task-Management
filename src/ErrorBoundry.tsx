@@ -1,7 +1,7 @@
 import React, { JSX } from "react";
 
 import { Box } from "@mui/material";
-import HeroBanner from "./components/HeroBanner";
+import HeroBanner from "./components/layout/HeroBanner";
 
 interface ErrorBoundaryProps {
     children: JSX.Element;

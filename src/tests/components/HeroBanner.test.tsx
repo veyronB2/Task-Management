@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 
-import HeroBanner from "../../components/HeroBanner";
+import HeroBanner from "../../components/layout/HeroBanner";
 
 describe("HeroBanner", () => {
     it("renders with default props", () => {

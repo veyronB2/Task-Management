@@ -1,7 +1,7 @@
 import { ColDef, GridOptions, ICellRendererParams } from "ag-grid-community";
 import { GetActionIcons, getNoOverlayNoRowsTemplate, getSideBar } from "../utilities/agGrid";
 
-import CheckBoxRenderer from "../components/table/CheckBoxRenderer";
+import CheckBoxRenderer from "../components/agGrid/CheckBoxRenderer";
 import { Task } from "../mock-api";
 import { formatDisplayDate } from "../utilities/utitlities";
 import { getDataPath } from "../utilities/taskTable";

@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 
-import Home from "./components/Home";
+import Home from "./components/views/Home";
 import React from "react";
 import ViewTasks from "./components/table/TaskTable";
 import { viewTasksPath } from "./utilities/constants";

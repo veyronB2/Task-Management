@@ -1,9 +1,9 @@
 import { Box, Button, Stack } from "@mui/material";
 import React, { useCallback } from "react";
 
-import HeroBanner from "./HeroBanner";
+import HeroBanner from "../layout/HeroBanner";
 import { useNavigate } from "react-router-dom";
-import { viewTasksPath } from "../utilities/constants";
+import { viewTasksPath } from "../../utilities/constants";
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
