@@ -41,6 +41,11 @@ export const transformTasksToPathArray = (tasks: Task[], columnDefs: ColDef<RowD
                 });
             }
         });
+
+        result.push({
+            path: [taskId, "Actions"],
+            value: null
+        });
     });
 
     return result;

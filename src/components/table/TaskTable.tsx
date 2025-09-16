@@ -1,6 +1,6 @@
 import "ag-grid-community/styles/ag-theme-material.css";
 
-import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
+import { AllCommunityModule, DefaultMenuItem, GetMainMenuItemsParams, MenuItemDef, ModuleRegistry } from "ag-grid-community";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { Box, Paper } from "@mui/material";
 import TaskFormModal, { TaskFormData } from "../modals/TaskFormModal";
@@ -100,6 +100,20 @@ const TaskTable = () => {
         }
     }, [isMobile]);
 
+    const getMainMenuItems = useCallback((params: GetMainMenuItemsParams): (MenuItemDef | DefaultMenuItem)[] => {
+        const defaultItems = params.defaultItems ?? [];
+
+        const customItems: (MenuItemDef | DefaultMenuItem)[] = [
+            ...defaultItems.filter(item => item === "sortAscending" || item === "sortDescending"),
+        ];
+
+        if (isMobile) {
+            customItems.push("separator", "expandAll", "contractAll");
+        }
+
+        return customItems;
+    }, [isMobile]);
+
     return (
         <Box display="flex" flexDirection="column" width="100%" px="3rem">
             <HeroBanner title="View All Tasks" />
@@ -114,6 +128,7 @@ const TaskTable = () => {
                     context={{ handleDeleteClick, handleEditClick }}
                     loading={loading}
                     pagination={!isMobile}
+                    getMainMenuItems={getMainMenuItems}
                 />
             </Paper>
             <TaskFormModal
