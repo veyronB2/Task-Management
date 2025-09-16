@@ -1,7 +1,7 @@
 import { AllEnterpriseModule, ModuleRegistry } from "ag-grid-enterprise";
+import { ICellRendererParams, SideBarDef, ToolPanelDef } from "ag-grid-community";
 
 import { AgGridActionIcon } from "../components/table/AgGridActionIcon";
-import { ICellRendererParams } from "ag-grid-community";
 import { Task } from "../mock-api";
 import { useCallback } from "react";
 
@@ -45,4 +45,47 @@ interface GetNoOverlayNoRowsTemplateProps {
 export const getNoOverlayNoRowsTemplate = ( { entity, customMessage }: GetNoOverlayNoRowsTemplateProps) => {
     const message = customMessage ? customMessage : `There are no ${entity} for the specified criteria.`;
     return `<span class=ag-overlay-no-rows-center>${message}</span>`;
+};
+
+interface GetSideBar {
+    columns?: boolean;
+    filters?: boolean;
+}
+
+export const getSideBar = ({columns = true, filters = true}: GetSideBar): SideBarDef => {
+    const toolPanels: ToolPanelDef[] = [];
+
+    if (columns) {
+        toolPanels.push({
+            id: "columns",
+            labelDefault: "Columns",
+            labelKey: "columns",
+            iconKey: "columns",
+            toolPanel: "agColumnsToolPanel",
+            toolPanelParams: {
+                suppressRowGroups: true,
+                suppressValues: true,
+                suppressPivots: true,
+                suppressPivotMode: true,
+                suppressColumnExpandAll: true,
+            },
+        });
+    }
+
+    if (filters) {
+        toolPanels.push({
+            id: "filters",
+            labelDefault: "Filters",
+            labelKey: "filters",
+            iconKey: "filter",
+            toolPanel: "agFiltersToolPanel",
+            toolPanelParams: {
+                suppressExpandAll: true,
+                suppressFilterSearch: true,
+                suppressSyncLayoutWithGrid: false,
+
+            },
+        });
+    }
+    return { toolPanels };
 };

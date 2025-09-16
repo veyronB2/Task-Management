@@ -1,5 +1,5 @@
 import { ColDef, GridOptions, ICellRendererParams } from "ag-grid-community";
-import { GetActionIcons, getNoOverlayNoRowsTemplate } from "../utilities/agGrid";
+import { GetActionIcons, getNoOverlayNoRowsTemplate, getSideBar } from "../utilities/agGrid";
 
 import CheckBoxRenderer from "../components/table/CheckBoxRenderer";
 import { Task } from "../mock-api";
@@ -12,6 +12,7 @@ export const gridOptions: GridOptions = {
     paginationPageSize: 5,
     suppressCellFocus: true,
     paginationPageSizeSelector: [5, 10, 15],
+    sideBar: getSideBar({}),
     defaultColDef: {
         flex: 1,
         resizable: true,

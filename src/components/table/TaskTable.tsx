@@ -1,6 +1,6 @@
 import "ag-grid-community/styles/ag-theme-material.css";
 
-import { AllCommunityModule, DefaultMenuItem, GetMainMenuItemsParams, MenuItemDef, ModuleRegistry } from "ag-grid-community";
+import { AllCommunityModule, DefaultMenuItem, GetMainMenuItemsParams, MenuItemDef, ModuleRegistry, iconOverrides, themeAlpine } from "ag-grid-community";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { Box, Paper } from "@mui/material";
 import TaskFormModal, { TaskFormData } from "../modals/TaskFormModal";
@@ -20,6 +20,19 @@ import { format } from "date-fns";
 import { getSnackbarNotification } from "../../utilities/notifications";
 
 ModuleRegistry.registerModules([AllCommunityModule, RowGroupingModule]);
+
+const customTheme = themeAlpine
+    .withPart(
+        iconOverrides({
+            type: "image",
+            mask: true,
+            icons: {
+                "menu-alt": {
+                    url: "https://www.ag-grid.com/example-assets/svg-icons/menu-alt.svg",
+                },
+            },
+        }),
+    );
 
 const TaskTable = () => {
     const gridRef = useRef<AgGridReact>(null);
@@ -120,6 +133,7 @@ const TaskTable = () => {
             <FormActionButtons handleOpenFormModal={handleOpenFormModal} />
             <Paper sx={{ mt: 4, padding: "4rem" }}>
                 <Table
+                    theme={customTheme}
                     key={isMobile ? "mobile" : "desktop"}
                     gridRef={gridRef}
                     rowData={getTransformedData(data, isMobile, columnDefs) ?? []}
