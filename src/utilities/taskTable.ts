@@ -1,4 +1,5 @@
-import { ColDef } from "ag-grid-enterprise";
+import { ColDef, iconOverrides, themeAlpine } from "ag-grid-enterprise";
+
 import { RowData } from "../configs/taskTableGridConfig";
 import { Task } from "../mock-api";
 import { convertStringToPascalWithSpaces } from "./utitlities";
@@ -65,5 +66,18 @@ export const getTransformedData = (data: Task[] | null, isMobile: boolean, colum
 };
 
 export const getTaskDataById = (tasks: Task[], idToFind: string) => tasks?.find(task => task.id === idToFind);
+
+export const customTheme = themeAlpine
+    .withPart(
+        iconOverrides({
+            type: "image",
+            mask: true,
+            icons: {
+                "menu-alt": {
+                    url: "https://www.ag-grid.com/example-assets/svg-icons/menu-alt.svg",
+                },
+            },
+        }),
+    );
 
 

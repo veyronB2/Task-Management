@@ -1,12 +1,12 @@
 import { format } from "date-fns";
 
-export const formatDisplayDate = (dateString: string): string => {
+export const formatDisplayDate = (dateValue: string | Date): string => {
     try {
-        return format(new Date(dateString), "dd MMMM yyyy, HH:mm:ss");
+        return format(new Date(dateValue), "dd MMMM yyyy, HH:mm:ss");
     } catch (error) {
         console.warn(`Invalid date ${error}`);
 
-        return dateString;
+        return dateValue instanceof Date ? dateValue.toISOString() : dateValue;
     }
 };
 
@@ -27,9 +27,3 @@ export const convertStringToPascalWithSpaces = (text: string, enableAcronyms: bo
 
     return capitalizeStringFirstCharacter(result);
 };
-
-
-
-
-
-

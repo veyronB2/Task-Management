@@ -59,7 +59,7 @@ export const mobileColumnDefs: ColDef<RowDataMobile>[] = [
             const value = params.value;
             if (typeof value === "boolean") {
                 return CheckBoxRenderer(value);
-            } else if (typeof value === "string" && !isNaN(Date.parse(value))) {
+            } else if (value instanceof Date || (typeof value === "string" && !isNaN(Date.parse(value)))) {
                 return formatDisplayDate(value);
             } else if (params.data?.path.includes("Actions")) {
                 return GetActionIcons(params);
@@ -87,5 +87,3 @@ export const columnDefs: ColDef<RowData>[] = [
         cellRenderer: GetActionIcons,
     },
 ];
-
-
