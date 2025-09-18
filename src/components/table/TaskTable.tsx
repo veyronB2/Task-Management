@@ -18,8 +18,12 @@ import { RowGroupingModule } from "ag-grid-enterprise";
 import Table from "./Table";
 import { format } from "date-fns";
 import { getSnackbarNotification } from "../../utilities/notifications";
+import { heroBannerDefaultAnimation } from "../../animations/heroBanner";
+import { motion } from "framer-motion";
 
 ModuleRegistry.registerModules([AllCommunityModule, RowGroupingModule]);
+
+const MotionPaper = motion(Paper);
 
 const TaskTable = () => {
     const gridRef = useRef<AgGridReact>(null);
@@ -114,11 +118,20 @@ const TaskTable = () => {
         return customItems;
     }, [isMobile]);
 
+
     return (
         <Box display="flex" flexDirection="column" width="100%" px="3rem">
-            <HeroBanner title="View All Tasks" />
+            <HeroBanner title="View All Tasks" animation={heroBannerDefaultAnimation} />
             <FormActionButtons handleOpenFormModal={handleOpenFormModal} />
-            <Paper sx={{ mt: 4, padding: "4rem" }}>
+            <MotionPaper
+                initial={{ x: "+100vw" }}
+                animate={{ x: 0 }}
+                transition={{
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 12,
+                }}
+                sx={{ mt: 4, padding: "4rem" }}>
                 <Table
                     theme={customTheme}
                     key={isMobile ? "mobile" : "desktop"}
@@ -131,7 +144,7 @@ const TaskTable = () => {
                     pagination={!isMobile}
                     getMainMenuItems={getMainMenuItems}
                 />
-            </Paper>
+            </MotionPaper>
             <TaskFormModal
                 open={modalOpen}
                 onCancel={handleCloseModal}

@@ -2,6 +2,7 @@ import { Box, Button, Stack } from "@mui/material";
 import React, { useCallback } from "react";
 
 import HeroBanner from "../layout/HeroBanner";
+import { heroBannerDefaultAnimation } from "../../animations/heroBanner";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { viewTasksPath } from "../../utilities/constants";
@@ -29,19 +30,7 @@ const Home: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
         >
-            <motion.div
-                initial={{ y: -100, opacity: 0, rotate: -5 }}
-                animate={{ y: 0, opacity: 1, rotate: 0 }}
-                transition={{
-                    type: "spring",
-                    stiffness: 120,
-                    damping: 12,
-                    delay: 0.2,
-                }}
-            >
-                <HeroBanner title="Task Management" />
-            </motion.div>
-
+            <HeroBanner title="Task Management" animation={heroBannerDefaultAnimation} />
             <MotionStack
                 spacing={2}
                 direction={{ xs: "column", sm: "row" }}
