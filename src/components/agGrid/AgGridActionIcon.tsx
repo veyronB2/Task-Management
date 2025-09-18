@@ -7,6 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { convertStringToPascalWithSpaces } from "../../utilities/utitlities";
+import { motion } from "framer-motion";
 
 interface AgGridActionIconProps extends Omit<IconButtonProps, "children"> {
     iconType: "delete" | "edit" | "view";
@@ -16,9 +17,9 @@ interface AgGridActionIconProps extends Omit<IconButtonProps, "children"> {
 }
 
 const iconMap = {
-    delete: DeleteIcon,
-    edit: EditIcon,
-    view: VisibilityIcon,
+    delete: motion(DeleteIcon),
+    edit: motion(EditIcon),
+    view: motion(VisibilityIcon),
 };
 
 type MuiButtonColor = ButtonProps["color"];
@@ -69,7 +70,11 @@ export const AgGridActionIcon: React.FC<AgGridActionIconProps> = ({
                 size="small"
                 color={color}
             >
-                <IconComponent fontSize="small" />
+                <IconComponent
+                    fontSize="small"
+                    whileHover={{ scale: 1.5 }}
+                    whileTap={{ scale: 0.95 }}
+                />
             </IconButton>
         </Tooltip>
     );
