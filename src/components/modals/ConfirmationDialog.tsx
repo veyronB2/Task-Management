@@ -31,7 +31,7 @@ interface ConfirmDialogProps {
     btnDisabled?: boolean;
 }
 
-const modalVariants = {
+const modalVariants: any = {
     hidden: { y: "-100vh", opacity: 0 },
     visible: {
         y: 0,
@@ -50,8 +50,6 @@ const modalVariants = {
         },
     },
 };
-
-const MotionPaper = motion(Box);
 
 const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
     open,
@@ -95,12 +93,14 @@ const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
                     onClose={onCancel}
                     maxWidth="xs"
                     fullWidth
-                    PaperProps={{
-                        component: MotionPaper,
-                        variants: modalVariants,
-                        initial: "hidden",
-                        animate: "visible",
-                        exit: "exit",
+                    slotProps={{
+                        paper: {
+                            component: motion.div,
+                            variants: modalVariants,
+                            initial: "hidden",
+                            animate: "visible",
+                            exit: "exit",
+                        } as any,
                     }}
                 >
                     <DialogTitle>
