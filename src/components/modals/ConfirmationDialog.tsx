@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import {
     Box,
     Button,
@@ -29,6 +30,28 @@ interface ConfirmDialogProps {
     titleIcon?: boolean;
     btnDisabled?: boolean;
 }
+
+const modalVariants = {
+    hidden: { y: "-100vh", opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        transition: {
+            type: "spring",
+            stiffness: 200,
+            damping: 20,
+        },
+    },
+    exit: {
+        y: "-100vh",
+        opacity: 0,
+        transition: {
+            duration: 0.3,
+        },
+    },
+};
+
+const MotionPaper = motion(Box);
 
 const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
     open,
@@ -65,29 +88,51 @@ const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
     }, [onCancel, onConfirm]);
 
     return (
-        <Dialog open={open} onClose={onCancel} maxWidth="xs" fullWidth>
-            <DialogTitle>
-                <Box display="flex" alignItems="center" p={1} borderRadius={1}>
-                    {titleIcon && <WarningAmberIcon sx={{ color: "gold", mr: 1 }} />}
-                    <Typography variant="h1" component="span" fontSize={"1.3rem"} letterSpacing={"0.1rem"} fontWeight={"500"}>
-                        {title ? `${title}!` : "Confirm!"}
-                    </Typography>
-                </Box>
-            </DialogTitle>
-            <DialogContent>
-                <DialogContentText>{message}</DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                {(buttons ?? defaultButtons).map(config => {
-                    const { text, ...btnProps } = config;
-                    return (
-                        <Button sx={{textTransform: "none"}} key={text} {...btnProps} disabled={btnDisabled}>
-                            {text}
-                        </Button>
-                    );
-                })}
-            </DialogActions>
-        </Dialog>
+        <AnimatePresence>
+            {open && (
+                <Dialog
+                    open={open}
+                    onClose={onCancel}
+                    maxWidth="xs"
+                    fullWidth
+                    PaperProps={{
+                        component: MotionPaper,
+                        variants: modalVariants,
+                        initial: "hidden",
+                        animate: "visible",
+                        exit: "exit",
+                    }}
+                >
+                    <DialogTitle>
+                        <Box display="flex" alignItems="center" p={1} borderRadius={1}>
+                            {titleIcon && <WarningAmberIcon sx={{ color: "gold", mr: 1 }} />}
+                            <Typography
+                                variant="h1"
+                                component="span"
+                                fontSize={"1.3rem"}
+                                letterSpacing={"0.1rem"}
+                                fontWeight={"500"}
+                            >
+                                {title ? `${title}!` : "Confirm!"}
+                            </Typography>
+                        </Box>
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>{message}</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        {(buttons ?? defaultButtons).map(config => {
+                            const { text, ...btnProps } = config;
+                            return (
+                                <Button sx={{ textTransform: "none" }} key={text} {...btnProps} disabled={btnDisabled}>
+                                    {text}
+                                </Button>
+                            );
+                        })}
+                    </DialogActions>
+                </Dialog>
+            )}
+        </AnimatePresence>
     );
 };
 

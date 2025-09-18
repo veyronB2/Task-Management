@@ -128,8 +128,8 @@ const TaskTable = () => {
                 animate={{ x: 0 }}
                 transition={{
                     type: "spring",
-                    stiffness: 120,
-                    damping: 12,
+                    stiffness: 200,
+                    damping: 20,
                 }}
                 sx={{ mt: 4, padding: "4rem" }}>
                 <Table

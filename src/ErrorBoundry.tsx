@@ -2,6 +2,7 @@ import React, { JSX } from "react";
 
 import { Box } from "@mui/material";
 import HeroBanner from "./components/layout/HeroBanner";
+import { heroBannerDefaultAnimation } from "./animations/heroBanner";
 
 interface ErrorBoundaryProps {
     children: JSX.Element;
@@ -31,7 +32,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
                 justifyContent="center"
                 px={2}
             >
-                <HeroBanner title="Something went wrong..." />
+                <HeroBanner title="Something went wrong. Try to refresh the page..." animation={heroBannerDefaultAnimation} />
             </Box>;
         }
 
