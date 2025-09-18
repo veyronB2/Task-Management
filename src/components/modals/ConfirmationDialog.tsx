@@ -81,7 +81,7 @@ const ConfirmationDialog: React.FC<ConfirmDialogProps> = ({
                 {(buttons ?? defaultButtons).map(config => {
                     const { text, ...btnProps } = config;
                     return (
-                        <Button key={text} {...btnProps} disabled={btnDisabled}>
+                        <Button sx={{textTransform: "none"}} key={text} {...btnProps} disabled={btnDisabled}>
                             {text}
                         </Button>
                     );

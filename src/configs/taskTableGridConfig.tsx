@@ -62,7 +62,7 @@ export const mobileColumnDefs: ColDef<RowDataMobile>[] = [
             } else if (value instanceof Date || (typeof value === "string" && !isNaN(Date.parse(value)))) {
                 return formatDisplayDate(value);
             } else if (params.data?.path.includes("Actions")) {
-                return GetActionIcons(params);
+                return GetActionIcons(params, true);
             }
             return value;
         }

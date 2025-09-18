@@ -19,6 +19,9 @@ import { Controller, useForm } from "react-hook-form";
 import React, { useCallback, useEffect } from "react";
 import { UpdateTaskData, createTask, updateTask } from "../../mock-api";
 
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 import { getSnackbarNotification } from "../../utilities/notifications";
 import { taskFormSchema } from "../../schemas/taskFormSchema";
 import { z } from "zod";
@@ -190,8 +193,22 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onCancel, taskData,
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCancel} disabled={isSubmitting}>Cancel</Button>
-                <Button type="submit" onClick={handleSubmit(onSubmit)} disabled={isSubmitting || !isDirty} variant="contained">
+                <Button
+                    variant={"outlined"}
+                    onClick={handleCancel}
+                    disabled={isSubmitting}
+                    sx={{textTransform: "none"}}
+                    endIcon={<CloseIcon />}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    type="submit"
+                    onClick={handleSubmit(onSubmit)}
+                    disabled={isSubmitting || !isDirty}
+                    variant="contained" sx={{textTransform: "none"}}
+                    endIcon={taskId ? <EditIcon /> : <AddIcon />}
+                >
                     {isSubmitting ? <CircularProgress size={24} color="inherit" /> : taskId ? "Update Task" : "Create Task"}
                 </Button>
             </DialogActions>

@@ -2,6 +2,7 @@ import { AllEnterpriseModule, ModuleRegistry } from "ag-grid-enterprise";
 import { ICellRendererParams, SideBarDef, ToolPanelDef } from "ag-grid-community";
 
 import { AgGridActionIcon } from "../components/agGrid/AgGridActionIcon";
+import { Box } from "@mui/material";
 import { Task } from "../mock-api";
 import { useCallback } from "react";
 
@@ -10,7 +11,7 @@ ModuleRegistry.registerModules([AllEnterpriseModule]);
 interface GetActionsIconsProps extends Task {
     path: string;
 }
-export const GetActionIcons = (params: ICellRendererParams<GetActionsIconsProps> ) => {
+export const GetActionIcons = (params: ICellRendererParams<GetActionsIconsProps>, isMobile: boolean = false ) => {
 
     let taskId: string | undefined;
     if (params.data?.path) {
@@ -30,10 +31,16 @@ export const GetActionIcons = (params: ICellRendererParams<GetActionsIconsProps>
     }, [params.context, taskId]);
 
     return (
-        <>
-            <AgGridActionIcon tooltip="Edit Task" iconType="edit" onClick={handleEditClick} color="success" />
-            <AgGridActionIcon tooltip="Delete Task" iconType="delete" onClick={handleDeleteClick} color="error" />
-        </>
+        <Box
+            display="flex"
+            justifyContent={isMobile ? "space-evenly" : "flex-start"}
+            alignItems="center"
+            height="100%"
+            gap={isMobile ? 0 : 1}
+        >
+            <AgGridActionIcon tooltip="Edit Task" iconType="edit" onClick={handleEditClick} color="success" isMobile={isMobile} />
+            <AgGridActionIcon tooltip="Delete Task" iconType="delete" onClick={handleDeleteClick} color="error" isMobile={isMobile} />
+        </Box>
     );
 };
 
