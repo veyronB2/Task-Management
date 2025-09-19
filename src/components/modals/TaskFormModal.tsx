@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import {
     Box,
     Button,
@@ -42,6 +43,36 @@ const initialFormData: TaskFormData = {
     completed: "false",
     description: ""
 };
+
+
+export const modalVariants: any = {
+    hidden: {
+        y: 100,
+        scale: 0.8,
+        opacity: 0,
+    },
+    visible: {
+        y: 0,
+        scale: 1,
+        opacity: 1,
+        filter: "blur(0px)",
+        transition: {
+            type: "spring",
+            stiffness: 200,
+            damping: 20,
+        },
+    },
+    exit: {
+        y: 100,
+        scale: 0.8,
+        opacity: 0,
+        filter: "blur(10px)",
+        transition: {
+            duration: 0.3,
+        },
+    },
+};
+
 
 const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onCancel, taskData, onTaskComplete }) => {
     const theme = useTheme();
@@ -99,120 +130,143 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onCancel, taskData,
     }, [onCancel, reset]);
 
     return (
-        <Dialog open={open} onClose={handleCancel} fullWidth maxWidth="sm">
-            <DialogTitle>{taskId ? "Update Task" : "Create Task"}</DialogTitle>
-            <DialogContent>
-                <Box
-                    component="form"
-                    display="flex"
-                    flexDirection="column"
-                    gap={2}
-                    mt={1}
+        <AnimatePresence>
+            {open && (
+                <Dialog
+                    open={open}
+                    onClose={onCancel}
+                    maxWidth="xs"
+                    fullWidth
+                    slotProps={{
+                        paper: {
+                            component: motion.div,
+                            variants: modalVariants,
+                            initial: "hidden",
+                            animate: "visible",
+                            exit: "exit",
+                        } as any,
+                    }}
                 >
-                    <Controller
-                        name="title"
-                        control={control}
-                        render={({field}) => (
-                            <TextField
-                                {...field}
-                                sx={fieldBackground}
-                                label="Title"
-                                required
-                                fullWidth
-                                error={!!errors.title}
-                                disabled={isSubmitting}
-                                helperText={errors.title?.message}
-                            />
-                        )}
-                    />
-                    <Controller
-                        name="dueDate"
-                        control={control}
-                        render={({field}) => (
-                            <TextField
-                                {...field}
-                                sx={fieldBackground}
-                                label="Due Date"
-                                name="dueDate"
-                                type="datetime-local"
-                                fullWidth
-                                required
-                                disabled={isSubmitting}
-                                error={!!errors.dueDate}
-                                helperText={errors.dueDate?.message}
-                                slotProps={{ htmlInput: { step: 1 }, inputLabel: { shrink: true } }}
-                            />
-                        )}
-                    />
-                    <Controller
-                        name="completed"
-                        control={control}
-                        render={({field}) => (
-                            <FormControl
-                                {...field}
-                                fullWidth
-                                required
-                                disabled={isSubmitting}
-                                error={!!errors.completed}
-                            >
-                                <InputLabel id="completed-label">Completed</InputLabel>
-                                <Select
-                                    sx={fieldBackground}
-                                    labelId="completed-label"
-                                    id="completed"
-                                    label="Completed"
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                >
-                                    <MenuItem value="true">Yes</MenuItem>
-                                    <MenuItem value="false">No</MenuItem>
-                                </Select>
-                                {errors.completed && (
-                                    <FormHelperText>{errors.completed.message}</FormHelperText>
+                    <DialogTitle>{taskId ? "Update Task" : "Create Task"}</DialogTitle>
+                    <DialogContent>
+                        <Box
+                            component="form"
+                            display="flex"
+                            flexDirection="column"
+                            gap={2}
+                            mt={1}
+                        >
+                            <Controller
+                                name="title"
+                                control={control}
+                                render={({field}) => (
+                                    <TextField
+                                        {...field}
+                                        sx={fieldBackground}
+                                        label="Title"
+                                        required
+                                        fullWidth
+                                        error={!!errors.title}
+                                        disabled={isSubmitting}
+                                        helperText={errors.title?.message}
+                                    />
                                 )}
-                            </FormControl>
-                        )}
-                    />
-                    <Controller
-                        name="description"
-                        control={control}
-                        render={({field}) => (
-                            <TextField
-                                {...field}
-                                sx={fieldBackground}
-                                label="Description"
-                                multiline
-                                rows={isMobile ? 3 : 5}
-                                fullWidth
-                                error={!!errors.description}
-                                disabled={isSubmitting}
-                                helperText={errors.description?.message}
                             />
-                        )}
-                    />
-                </Box>
-            </DialogContent>
-            <DialogActions>
-                <Button
-                    variant={"outlined"}
-                    onClick={handleCancel}
-                    disabled={isSubmitting}
-                    sx={{textTransform: "none"}}
-                    endIcon={<CloseIcon />}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    type="submit"
-                    onClick={handleSubmit(onSubmit)}
-                    disabled={isSubmitting || !isDirty}
-                    variant="contained" sx={{textTransform: "none"}}
-                    endIcon={taskId ? <EditIcon /> : <AddIcon />}
-                >
-                    {isSubmitting ? <CircularProgress size={24} color="inherit" /> : taskId ? "Update Task" : "Create Task"}
-                </Button>
-            </DialogActions>
-        </Dialog>
+                            <Controller
+                                name="dueDate"
+                                control={control}
+                                render={({field}) => (
+                                    <TextField
+                                        {...field}
+                                        sx={fieldBackground}
+                                        label="Due Date"
+                                        name="dueDate"
+                                        type="datetime-local"
+                                        fullWidth
+                                        required
+                                        disabled={isSubmitting}
+                                        error={!!errors.dueDate}
+                                        helperText={errors.dueDate?.message}
+                                        slotProps={{ htmlInput: { step: 1 }, inputLabel: { shrink: true } }}
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="completed"
+                                control={control}
+                                render={({field}) => (
+                                    <FormControl
+                                        {...field}
+                                        fullWidth
+                                        required
+                                        disabled={isSubmitting}
+                                        error={!!errors.completed}
+                                    >
+                                        <InputLabel id="completed-label">Completed</InputLabel>
+                                        <Select
+                                            sx={fieldBackground}
+                                            labelId="completed-label"
+                                            id="completed"
+                                            label="Completed"
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                        >
+                                            <MenuItem value="true">Yes</MenuItem>
+                                            <MenuItem value="false">No</MenuItem>
+                                        </Select>
+                                        {errors.completed && (
+                                            <FormHelperText>{errors.completed.message}</FormHelperText>
+                                        )}
+                                    </FormControl>
+                                )}
+                            />
+                            <Controller
+                                name="description"
+                                control={control}
+                                render={({field}) => (
+                                    <TextField
+                                        {...field}
+                                        sx={fieldBackground}
+                                        label="Description"
+                                        multiline
+                                        rows={isMobile ? 3 : 5}
+                                        fullWidth
+                                        error={!!errors.description}
+                                        disabled={isSubmitting}
+                                        helperText={errors.description?.message}
+                                    />
+                                )}
+                            />
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            variant={"outlined"}
+                            onClick={handleCancel}
+                            disabled={isSubmitting}
+                            sx={{textTransform: "none"}}
+                            endIcon={<CloseIcon />}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            onClick={handleSubmit(onSubmit)}
+                            disabled={isSubmitting || !isDirty}
+                            variant="contained" sx={{textTransform: "none"}}
+                            endIcon={taskId ? <EditIcon /> : <AddIcon />}
+                        >
+                            {isSubmitting ? <CircularProgress size={24} color="inherit" /> : taskId ? "Update Task" : "Create Task"}
+                        </Button>
+                    </DialogActions>
+
+
+                </Dialog>
+
+
+            )}
+            {/* <Dialog open={open} onClose={handleCancel} fullWidth maxWidth="sm" /> */}
+        </AnimatePresence>
     );
 };
 
