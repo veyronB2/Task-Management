@@ -29,7 +29,7 @@ const MotionPaper = motion(Paper);
 const TaskTable = () => {
     const gridRef = useRef<AgGridReact>(null);
     const dispatch: ThunkDispatch<any, any, AnyAction> = useAppDispatch();
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
 
     const [taskData, setTaskData] = useState<TaskFormData | null>(null);
     const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
@@ -44,7 +44,7 @@ const TaskTable = () => {
     useEffect(() => getTasks(), [getTasks]);
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        const handleResize = () => setIsMobile(window.innerWidth < 1000);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
@@ -116,7 +116,15 @@ const TaskTable = () => {
     }, [isMobile]);
 
     return (
-        <Box display="flex" flexDirection="column" width="100%" px="3rem">
+        <Box display="flex" flexDirection="column" width="100%" sx={{
+            px: {
+                xs: "0.5rem",
+                sm: "1rem",
+                md: "2rem",
+                lg: "3rem",
+                xl: "4rem",
+            },
+        }}>
             <HeroBanner title="View All Tasks" animation={heroBannerDefaultAnimation} />
             <FormActionButtons handleOpenFormModal={handleOpenFormModal} />
             <MotionPaper
@@ -128,7 +136,7 @@ const TaskTable = () => {
                     damping: 50,
                     delay: 0.2,
                 }}
-                sx={{ mt: 4, padding: "4rem" }}>
+                sx={{ mt: {xs: "1rem", lg: "1.5rem"}, padding: isMobile ? "0.5rem" : "2rem" }}>
                 <Table
                     theme={customTheme}
                     key={isMobile ? "mobile" : "desktop"}

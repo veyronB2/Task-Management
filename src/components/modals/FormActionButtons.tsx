@@ -17,11 +17,10 @@ const FormActionButtons = ({ handleOpenFormModal, buttonText = "Add Task" }: For
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
             >
-                <Button variant="contained" color="secondary" onClick={handleOpenFormModal} sx={{textTransform: "none"}}>
+                <Button variant="contained" color="secondary" onClick={handleOpenFormModal} sx={{textTransform: "none", width: "100%"}}>
                     {buttonText}
                 </Button>
             </motion.div>
-
         </Box>
     );
 };
