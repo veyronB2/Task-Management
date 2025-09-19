@@ -1,5 +1,5 @@
 import { AgGridReact, AgGridReactProps } from "ag-grid-react";
-import { CSSProperties, RefObject, useImperativeHandle, useMemo, useRef } from "react";
+import { CSSProperties, RefObject, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { ColDef, ColGroupDef, DefaultMenuItem, GetContextMenuItemsParams, GetMainMenuItemsParams, MenuItemDef } from "ag-grid-community";
 
 import { getMenuItems } from "../../utilities/agGrid";
@@ -11,11 +11,6 @@ type ThemeClassName = "ag-theme-quartz" |
     "ag-theme-balham" |
     "ag-theme-material";
 
-const defaultGridStyle: CSSProperties = {
-    height: "500px",
-    minHeight: "300px",
-    width: "100%"
-};
 
 export interface TableProps<T> extends Omit<AgGridReactProps<T>, "rowData" | "columnDefs" > {
     rowData: T[];
@@ -41,13 +36,49 @@ const Table = <T,>({
     mainMenuItems,
     ...rest}: TableProps<T>) => {
     const ref = useRef<AgGridReact<T>>(null);
+    const tableWrapperRef = useRef<HTMLDivElement | null>(null);
+    const [gridHeight, setGridHeight] = useState<number>(0);
 
     useImperativeHandle(gridRef, () => ref.current as AgGridReact<T>);
+
+    const recalculateGridHeight = useCallback(() => {
+        if (tableWrapperRef.current) {
+            const container = tableWrapperRef.current;
+            const containerTop = container.getBoundingClientRect().top;
+            const titleElement = document.getElementById("hero-banner");
+            const titleHeight = titleElement ? titleElement.offsetHeight : 0;
+            const availableHeight = window.innerHeight - containerTop - titleHeight ;
+
+            setGridHeight(availableHeight);
+        }
+    }, []);
+
+    useEffect(() => {
+        recalculateGridHeight();
+
+        const resizeObserver = new ResizeObserver(recalculateGridHeight);
+        if (tableWrapperRef.current) {
+            resizeObserver.observe(tableWrapperRef.current);
+        }
+
+        window.addEventListener("resize", recalculateGridHeight);
+
+        return () => {
+            resizeObserver.disconnect();
+            window.removeEventListener("resize", recalculateGridHeight);
+        };
+    }, [recalculateGridHeight, gridOptions]);
+
+    const defaultGridStyle = useMemo((): CSSProperties => ({
+        height: gridHeight,
+        minHeight: "18.75rem",
+        width: "100%"
+    }), [gridHeight]);
 
     const mergedGridStyles = useMemo((): CSSProperties => ({
         ...defaultGridStyle,
         ...gridStyle,
-    }), [gridStyle]);
+    }), [defaultGridStyle, gridStyle]);
 
     const mergedGridOptions = useMemo((): AgGridReactProps => {
         const updatedOptions = {
@@ -65,7 +96,7 @@ const Table = <T,>({
     }, [contextMenuItems, gridOptions, mainMenuItems]);
 
     return (
-        <div className={`${themeClassName} ${className ?? ""}`} style={mergedGridStyles}>
+        <div className={`${themeClassName} ${className ?? ""}`} style={mergedGridStyles} ref={tableWrapperRef}>
             <AgGridReact
                 ref={ref}
                 rowData={rowData}

@@ -18,7 +18,7 @@ const HeroBanner = ({ variant = "h1", align = "center", title, animation }: Hero
     const Wrapper = useMemo(() => animation ? motion.div : React.Fragment, [animation]);
 
     return (
-        <Wrapper {...(animation || {})}>
+        <Wrapper {...(animation || {})} id="hero-banner">
             <Typography
                 variant={variant}
                 align={align}
