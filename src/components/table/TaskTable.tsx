@@ -1,6 +1,6 @@
 import "ag-grid-community/styles/ag-theme-material.css";
 
-import { AllCommunityModule, DefaultMenuItem, GetMainMenuItemsParams, MenuItemDef, ModuleRegistry } from "ag-grid-community";
+import { AllCommunityModule, DefaultMenuItem, MenuItemDef, ModuleRegistry } from "ag-grid-community";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { Box, Paper } from "@mui/material";
 import TaskFormModal, { TaskFormData } from "../modals/TaskFormModal";
@@ -8,7 +8,7 @@ import { closeConfirmDialog, closeModal, fetchTasks, openConfirmDialog, openModa
 import { columnDefs, gridOptions, gridOptionsMobile, mobileColumnDefs } from "../../configs/taskTableGridConfig";
 import { customTheme, getTaskDataById, getTransformedData } from "../../utilities/taskTable";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { AgGridReact } from "ag-grid-react";
 import ConfirmDialog from "../modals/ConfirmationDialog";
@@ -16,6 +16,7 @@ import FormActionButtons from "../modals/FormActionButtons";
 import HeroBanner from "../layout/HeroBanner";
 import { RowGroupingModule } from "ag-grid-enterprise";
 import Table from "./Table";
+import { defaultMainMenuItems } from "../../utilities/agGrid";
 import { format } from "date-fns";
 import { getSnackbarNotification } from "../../utilities/notifications";
 import { heroBannerDefaultAnimation } from "../../animations/heroBanner";
@@ -104,20 +105,15 @@ const TaskTable = () => {
         }
     }, [isMobile]);
 
-    const getMainMenuItems = useCallback((params: GetMainMenuItemsParams): (MenuItemDef | DefaultMenuItem)[] => {
-        const defaultItems = params.defaultItems ?? [];
-
-        const customItems: (MenuItemDef | DefaultMenuItem)[] = [
-            ...defaultItems.filter(item => item === "sortAscending" || item === "sortDescending"),
-        ];
+    const getMainMenuItems = useMemo((): (MenuItemDef | DefaultMenuItem)[] => {
+        const menuItems = [...defaultMainMenuItems];
 
         if (isMobile) {
-            customItems.push("separator", "expandAll", "contractAll");
+            menuItems.push("separator", "expandAll", "contractAll");
         }
 
-        return customItems;
+        return menuItems;
     }, [isMobile]);
-
 
     return (
         <Box display="flex" flexDirection="column" width="100%" px="3rem">
@@ -142,7 +138,7 @@ const TaskTable = () => {
                     context={{ handleDeleteClick, handleEditClick }}
                     loading={loading}
                     pagination={!isMobile}
-                    getMainMenuItems={getMainMenuItems}
+                    mainMenuItems={getMainMenuItems}
                 />
             </MotionPaper>
             <TaskFormModal

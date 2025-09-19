@@ -1,9 +1,10 @@
 import { AllEnterpriseModule, ModuleRegistry } from "ag-grid-enterprise";
-import { ICellRendererParams, SideBarDef, ToolPanelDef } from "ag-grid-community";
+import { DefaultMenuItem, ICellRendererParams, MenuItemDef, SideBarDef, ToolPanelDef } from "ag-grid-community";
 
 import { AgGridActionIcon } from "../components/agGrid/AgGridActionIcon";
 import { Box } from "@mui/material";
 import { Task } from "../mock-api";
+import { isUndefined } from "lodash";
 import { useCallback } from "react";
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
@@ -95,4 +96,14 @@ export const getSideBar = ({columns = true, filters = true}: GetSideBar): SideBa
         });
     }
     return { toolPanels };
+};
+
+export const defaultMainMenuItems: DefaultMenuItem[] = ["sortAscending", "sortDescending"];
+export const defaultContextMenuItems: DefaultMenuItem[] = ["copy"];
+
+type MenuType = "context" | "main";
+export const getMenuItems = (columnId: string | undefined, menuItems: (DefaultMenuItem | MenuItemDef)[] | undefined, menuType: MenuType) => {
+    if (columnId === "actions" || columnId === "ag-Grid-SelectionColumn") return [];
+
+    return !isUndefined(menuItems) ? menuItems : menuType === "context" ? defaultContextMenuItems : defaultMainMenuItems;
 };
