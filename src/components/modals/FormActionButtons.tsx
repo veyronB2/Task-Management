@@ -13,7 +13,7 @@ const FormActionButtons = ({ handleOpenFormModal, buttonText = "Add Task" }: For
             <motion.div
                 initial={{ x: "-100vw" }}
                 animate={{ x: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 50 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
             >

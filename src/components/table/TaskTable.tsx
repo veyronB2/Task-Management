@@ -125,7 +125,8 @@ const TaskTable = () => {
                 transition={{
                     type: "spring",
                     stiffness: 200,
-                    damping: 20,
+                    damping: 50,
+                    delay: 0.2,
                 }}
                 sx={{ mt: 4, padding: "4rem" }}>
                 <Table
