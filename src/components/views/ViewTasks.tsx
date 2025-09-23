@@ -15,7 +15,7 @@ import ConfirmDialog from "../modals/ConfirmationDialog";
 import FormActionButtons from "../modals/FormActionButtons";
 import HeroBanner from "../layout/HeroBanner";
 import { RowGroupingModule } from "ag-grid-enterprise";
-import Table from "./Table";
+import Table from "../table/Table";
 import { defaultMainMenuItems } from "../../utilities/agGrid";
 import { format } from "date-fns";
 import { getSnackbarNotification } from "../../utilities/notifications";
@@ -26,7 +26,7 @@ ModuleRegistry.registerModules([AllCommunityModule, RowGroupingModule]);
 
 const MotionPaper = motion(Paper);
 
-const TaskTable = () => {
+const ViewTasks = () => {
     const gridRef = useRef<AgGridReact>(null);
     const dispatch: ThunkDispatch<any, any, AnyAction> = useAppDispatch();
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
@@ -128,6 +128,7 @@ const TaskTable = () => {
             <HeroBanner title="View All Tasks" animation={heroBannerDefaultAnimation} />
             <FormActionButtons handleOpenFormModal={handleOpenFormModal} />
             <MotionPaper
+                data-testid={"tasks-table-wrapper"}
                 initial={{ x: "+100vw" }}
                 animate={{ x: 0 }}
                 transition={{
@@ -138,6 +139,7 @@ const TaskTable = () => {
                 }}
                 sx={{ mt: {xs: "1rem", lg: "1.5rem"}, padding: isMobile ? "0.5rem" : "2rem" }}>
                 <Table
+                    testId="tasks-table"
                     theme={customTheme}
                     key={isMobile ? "mobile" : "desktop"}
                     gridRef={gridRef}
@@ -151,6 +153,7 @@ const TaskTable = () => {
                 />
             </MotionPaper>
             <TaskFormModal
+                testId="new-task-form"
                 open={modalOpen}
                 onCancel={handleCloseModal}
                 taskData={taskData}
@@ -167,4 +170,4 @@ const TaskTable = () => {
     );
 };
 
-export default TaskTable;
+export default ViewTasks;

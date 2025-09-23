@@ -35,6 +35,7 @@ interface TaskFormModalProps {
     onCancel: () => void;
     taskData?: TaskFormData | null;
     onTaskComplete: () => void;
+    testId?: string;
 }
 
 const initialFormData: TaskFormData = {
@@ -74,7 +75,7 @@ export const modalVariants: any = {
 };
 
 
-const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onCancel, taskData, onTaskComplete }) => {
+const TaskFormModal: React.FC<TaskFormModalProps> = ({open, onCancel, taskData, onTaskComplete, testId }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -129,12 +130,19 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onCancel, taskData,
         onCancel();
     }, [onCancel, reset]);
 
+    const handleDialogClose = useCallback((_event: object, reason: "backdropClick" | "escapeKeyDown") => {
+        if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
+            onCancel();
+        }
+    }, [onCancel]);
+
     return (
         <AnimatePresence>
             {open && (
                 <Dialog
+                    data-testid={testId}
                     open={open}
-                    onClose={onCancel}
+                    onClose={handleDialogClose}
                     maxWidth="xs"
                     fullWidth
                     slotProps={{
@@ -259,13 +267,8 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ open, onCancel, taskData,
                             {isSubmitting ? <CircularProgress size={24} color="inherit" /> : taskId ? "Update Task" : "Create Task"}
                         </Button>
                     </DialogActions>
-
-
                 </Dialog>
-
-
             )}
-            {/* <Dialog open={open} onClose={handleCancel} fullWidth maxWidth="sm" /> */}
         </AnimatePresence>
     );
 };

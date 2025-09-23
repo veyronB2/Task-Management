@@ -21,6 +21,7 @@ export interface TableProps<T> extends Omit<AgGridReactProps<T>, "rowData" | "co
     gridStyle?: CSSProperties;
     contextMenuItems?: (DefaultMenuItem | MenuItemDef)[];
     mainMenuItems?: (DefaultMenuItem | MenuItemDef)[];
+    testId?: string;
 }
 
 const Table = <T,>({
@@ -34,6 +35,7 @@ const Table = <T,>({
     gridOptions,
     contextMenuItems,
     mainMenuItems,
+    testId,
     ...rest}: TableProps<T>) => {
     const ref = useRef<AgGridReact<T>>(null);
     const tableWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -98,6 +100,7 @@ const Table = <T,>({
     return (
         <div className={`${themeClassName} ${className ?? ""}`} style={mergedGridStyles} ref={tableWrapperRef}>
             <AgGridReact
+                data-testid={testId}
                 ref={ref}
                 rowData={rowData}
                 columnDefs={columnDefs}

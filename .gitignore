@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Playright
+trace.zip
+traces/
+playwright-report/
+*.zip
+
