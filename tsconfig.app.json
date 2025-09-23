@@ -26,7 +26,8 @@
 		"types": ["vitest/globals", "node", "@testing-library/jest-dom"],
 
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+	  "@playwright/test": ["src/tests/e2e/test-helpers.ts"]
     }
   },
   "include": ["src"]

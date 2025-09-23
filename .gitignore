@@ -29,4 +29,5 @@ traces/
 playwright-report/
 *.zip
 error-context.md
+.last-run.json
 

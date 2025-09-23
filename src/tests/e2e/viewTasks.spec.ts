@@ -52,7 +52,9 @@ test.describe("View Tasks", () => {
         const agGrid = motionPaper.locator(".ag-root-wrapper");
         await expect(agGrid).toBeVisible();
 
+        await button.focus();
         await button.click();
+
         const newTaskForm = page.getByTestId("new-task-form");
         await expect(newTaskForm).toBeVisible();
     });
@@ -63,7 +65,11 @@ test.describe("Task Form Modal", () => {
         await page.goto("http://localhost:3000/view-tasks");
 
         const button = page.getByRole("button", { name: "Add Task" });
+        await expect(button).toBeVisible();
+        await button.focus();
         await button.click();
+
+        await expect(page.getByTestId("new-task-form")).toBeVisible();
     });
 
     test("should have correct fields on the form", async ({ page }) => {
