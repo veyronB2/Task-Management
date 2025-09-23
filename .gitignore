@@ -28,4 +28,5 @@ trace.zip
 traces/
 playwright-report/
 *.zip
+error-context.md
 

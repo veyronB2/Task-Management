@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "test:e2e": "playwright test --ui --trace off",
+    "test:e2e": "playwright test --trace off",
     "tsc": "tsc --noEmit --watch"
   },
   "dependencies": {
