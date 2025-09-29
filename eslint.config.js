@@ -102,6 +102,13 @@ const eslintConfig = tseslint.config(
                 ]
             }],
         },
+        "overrides": [
+            {
+            "files": ["src/tests/e2e/fixtures.ts"],
+            "rules": {
+                "react-hooks/rules-of-hooks": "off"
+            }}
+        ]
     },
 );
 

@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("Home", () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto("http://localhost:3000/");
+        await page.goto("/");
     });
 
     test("should have correct metadata and elements", async ({ page }) => {
@@ -17,6 +17,6 @@ test.describe("Home", () => {
 
     test("should redirect to view tasks page on click ", async ({ page }) => {
         await page.getByRole("button", { name: "VIEW TASKS"}).click();
-        await expect(page).toHaveURL("http://localhost:3000/view-tasks");
+        await expect(page).toHaveURL("/view-tasks");
     });
 });
