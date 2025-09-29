@@ -11,6 +11,7 @@ export default defineConfig({
     testMatch: "**/*.spec.ts",
     timeout: 60000,
     fullyParallel: true,
+    reporter: [["html", { open: "on-failure" }]],
     webServer: {
         command: "npm run dev",
         url: baseUrl,
