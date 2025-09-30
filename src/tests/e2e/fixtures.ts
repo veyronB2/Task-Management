@@ -1,5 +1,13 @@
 import { Locator, Page, test as base, expect } from "@playwright/test";
 
+interface ConfirmationDialog {
+    dialog: Locator;
+    title: Locator;
+    message: Locator;
+    cancelButton: Locator;
+    deleteButton: Locator;
+}
+
 type TaskFormFixture = {
     page: Page;
     viewTasks: {
@@ -20,6 +28,8 @@ type TaskFormFixture = {
         cancelButton: Locator;
         addButton: Locator;
     };
+    addTask: () => Promise<void>;
+    confirmationDialog: ConfirmationDialog;
 };
 
 export const test = base.extend<TaskFormFixture>({
@@ -41,11 +51,12 @@ export const test = base.extend<TaskFormFixture>({
         const addButton = page.getByRole("button", { name: "Add Task" });
         await use({ addButton })
     },
-    taskForm: async ({ page, viewTasks }, use) => {
-        const { addButton } = viewTasks
-        await expect(addButton).toBeVisible();
-        await addButton.click();
-
+    addTask: async ({ viewTasks }, use) => {
+        await expect(viewTasks.addButton).toBeVisible();
+        await use(() => viewTasks.addButton.click());
+    },
+    taskForm: async ({ page, addTask, viewTasks }, use) => {
+        await addTask();
         const form = page.getByTestId("new-task-form");
         await expect(form).toBeVisible();
 
@@ -75,9 +86,21 @@ export const test = base.extend<TaskFormFixture>({
             titleError,
             dueDateError,
             cancelButton,
-            addButton
+            addButton: viewTasks.addButton
         });
     },
+    confirmationDialog: async ({ page, viewTasks: _viewTasks }, use) => {
+        const deleteIcon = page.getByRole('row', { name: 'task-1 Setup project' }).getByRole('button').nth(1);
+        await deleteIcon.click();
+
+        const dialog = page.locator("div").filter({ hasText: "Confirm!Are you sure you want" }).nth(1);
+        const title = page.getByRole("heading", { name: "Confirm!" })
+        const message = page.getByText("Are you sure you want to delete this task?");
+        const cancelButton = page.getByRole('button', { name: "Cancel" })
+        const deleteButton = page.getByRole('button', { name: "Delete" })
+
+        await use({ dialog, title, message, cancelButton, deleteButton });
+    }
 });
 
 export { expect } from "@playwright/test";
